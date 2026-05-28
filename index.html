@@ -64,8 +64,8 @@ select,input{background:#121b2d;color:white;border:1px solid rgba(255,255,255,.1
 <button class="mainBtn darkBtn" onclick="startMultiplayer()">2 Player Mode</button>
 <button class="mainBtn darkBtn" onclick="showLeaderboard()">Leaderboard</button>
 </div>
-<button class="mainBtn darkBtn" onclick="toggleMusic()">🎵 Music On/Off</button>
-<div class="badge" id="menuBadge">Streak Bonus • Local Leaderboard • Hindi + English</div>
+<button class="mainBtn darkBtn" onclick="toggleMusic()">🎵 Music / Sound On-Off</button>
+<div class="badge" id="menuBadge">Music • Button Sounds • Streak Bonus • Hindi + English</div>
 </div>
 
 <div id="quizScreen">
@@ -103,7 +103,125 @@ select,input{background:#121b2d;color:white;border:1px solid rgba(255,255,255,.1
 </div>
 
 <script>
-const bgMusic=new Audio("background.mp3");bgMusic.loop=true;bgMusic.volume=.35;let musicStarted=false;
+
+let audioCtx = null;
+let musicEnabled = localStorage.getItem("musicEnabled") !== "false";
+let soundEnabled = localStorage.getItem("soundEnabled") !== "false";
+let musicTimer = null;
+
+function initAudio(){
+    if(!audioCtx){
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if(audioCtx.state === "suspended"){
+        audioCtx.resume();
+    }
+}
+
+function playTone(freq,duration,type="sine",volume=0.08){
+    if(!soundEnabled) return;
+    initAudio();
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = type;
+    osc.frequency.value = freq;
+
+    gain.gain.setValueAtTime(volume,audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + duration);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+}
+
+function playButtonSound(){
+    playTone(520,0.08,"square",0.045);
+    setTimeout(()=>playTone(720,0.07,"sine",0.035),55);
+}
+
+function playCorrectSound(){
+    playTone(650,0.10,"sine",0.07);
+    setTimeout(()=>playTone(900,0.12,"sine",0.06),90);
+    setTimeout(()=>playTone(1150,0.14,"sine",0.05),180);
+}
+
+function playWrongSound(){
+    playTone(220,0.16,"sawtooth",0.07);
+    setTimeout(()=>playTone(150,0.18,"sawtooth",0.05),130);
+}
+
+function playTickSound(){
+    playTone(420,0.04,"square",0.025);
+}
+
+function startBackgroundMusic(){
+    if(!musicEnabled || musicTimer) return;
+    initAudio();
+
+    const melody = [262,330,392,523,392,330,294,392];
+    let step = 0;
+
+    musicTimer = setInterval(()=>{
+        if(!musicEnabled) return;
+
+        const freq = melody[step % melody.length];
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = "triangle";
+        osc.frequency.value = freq;
+
+        gain.gain.setValueAtTime(0.035,audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001,audioCtx.currentTime + 0.28);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.28);
+
+        step++;
+    },320);
+}
+
+function stopBackgroundMusic(){
+    if(musicTimer){
+        clearInterval(musicTimer);
+        musicTimer = null;
+    }
+}
+
+function toggleMusic(){
+    initAudio();
+    playButtonSound();
+
+    musicEnabled = !musicEnabled;
+    soundEnabled = musicEnabled;
+
+    localStorage.setItem("musicEnabled",musicEnabled);
+    localStorage.setItem("soundEnabled",soundEnabled);
+
+    if(musicEnabled){
+        startBackgroundMusic();
+        showToast("🎵 Sound ON");
+    }else{
+        stopBackgroundMusic();
+        showToast("🔇 Sound OFF");
+    }
+}
+
+document.addEventListener("click",()=>{
+    if(musicEnabled){
+        startBackgroundMusic();
+    }
+},{once:true});
+
+
 
 const data={
 capital:[["India","New Delhi","भारत","नई दिल्ली"],["France","Paris","फ्रांस","पेरिस"],["Japan","Tokyo","जापान","टोक्यो"],["Uganda","Kampala","युगांडा","कंपाला"],["Kenya","Nairobi","केन्या","नैरोबी"],["China","Beijing","चीन","बीजिंग"],["Germany","Berlin","जर्मनी","बर्लिन"],["Italy","Rome","इटली","रोम"],["Australia","Canberra","ऑस्ट्रेलिया","कैनबरा"]],
@@ -145,15 +263,15 @@ function makeFixed(){let f=pick(fixed),L=lang();return {q:L==="hi"?f.hi:f.en,a:L
 
 function getQuestion(){return Math.random()<.25 && cat()==="mixed"?makeFixed():makeGenerated()}
 
-function startGame(m){multiplayer=false;mode=m;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
-function startMultiplayer(){multiplayer=true;mode="classic";mpNames=[player(),"Player 2"];mpScores=[0,0];playerIndex=0;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
+function startGame(m){initAudio();startBackgroundMusic();playButtonSound();multiplayer=false;mode=m;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
+function startMultiplayer(){initAudio();startBackgroundMusic();playButtonSound();multiplayer=true;mode="classic";mpNames=[player(),"Player 2"];mpScores=[0,0];playerIndex=0;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
 
 function updateLabels(){let L=lang();document.getElementById("scoreLabel").innerText=L==="hi"?"स्कोर":"Score";document.getElementById("streakLabel").innerText=L==="hi"?"स्ट्रीक":"Streak";document.getElementById("livesLabel").innerText=L==="hi"?"लाइफ":"Lives"}
 
-function showQuestion(){clearInterval(timer);locked=false;timeLeft=15;timerBar.style.width="100%";feedbackEl.innerText="";feedbackEl.className="";current=getQuestion();questionCount++;document.getElementById("questionNumber").innerText=(lang()==="hi"?"प्रश्न ":"Question ")+questionCount+(mode==="classic"?"/10":" • Endless");document.getElementById("playerTurn").innerText=multiplayer?("Turn: "+mpNames[playerIndex]+" | P1 "+mpScores[0]+" - P2 "+mpScores[1]):"";questionEl.innerText=current.q;answersEl.innerHTML="";current.a.forEach((ans,i)=>{let b=document.createElement("button");b.className="answerBtn";b.innerText=ans;b.onclick=()=>choose(i,b);answersEl.appendChild(b)});timer=setInterval(()=>{timeLeft-=.2;timerBar.style.width=Math.max(0,(timeLeft/15)*100)+"%";if(timeLeft<=0){clearInterval(timer);timeout()}},200)}
+function showQuestion(){clearInterval(timer);locked=false;timeLeft=15;timerBar.style.width="100%";feedbackEl.innerText="";feedbackEl.className="";current=getQuestion();questionCount++;document.getElementById("questionNumber").innerText=(lang()==="hi"?"प्रश्न ":"Question ")+questionCount+(mode==="classic"?"/10":" • Endless");document.getElementById("playerTurn").innerText=multiplayer?("Turn: "+mpNames[playerIndex]+" | P1 "+mpScores[0]+" - P2 "+mpScores[1]):"";questionEl.innerText=current.q;answersEl.innerHTML="";current.a.forEach((ans,i)=>{let b=document.createElement("button");b.className="answerBtn";b.innerText=ans;b.onclick=()=>choose(i,b);answersEl.appendChild(b)});timer=setInterval(()=>{timeLeft-=.2;timerBar.style.width=Math.max(0,(timeLeft/15)*100)+"%";if(timeLeft <= 5 && Math.abs(timeLeft - Math.round(timeLeft)) < 0.11){playTickSound()} if(timeLeft<=0){clearInterval(timer);timeout()}},200)}
 
-function choose(i,btn){if(locked)return;locked=true;clearInterval(timer);let all=document.querySelectorAll(".answerBtn");if(i===current.c){streak++;let pts=100+(streak>=3?50:0)+Math.round(timeLeft*5);score+=pts;if(multiplayer)mpScores[playerIndex]+=pts;btn.classList.add("correct");feedbackEl.innerText=(lang()==="hi"?"सही! +":"Correct! +")+pts;feedbackEl.className="good";if(navigator.vibrate)navigator.vibrate(40)}else{lives--;streak=0;btn.classList.add("wrong");all[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"गलत!":"Wrong!";feedbackEl.className="bad";if(navigator.vibrate)navigator.vibrate([60,40,60])}updateStats();setTimeout(next,1100)}
-function timeout(){if(locked)return;locked=true;lives--;streak=0;document.querySelectorAll(".answerBtn")[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"समय समाप्त!":"Time up!";feedbackEl.className="bad";updateStats();setTimeout(next,1100)}
+function choose(i,btn){if(locked)return;locked=true;clearInterval(timer);let all=document.querySelectorAll(".answerBtn");if(i===current.c){playCorrectSound();streak++;let pts=100+(streak>=3?50:0)+Math.round(timeLeft*5);score+=pts;if(multiplayer)mpScores[playerIndex]+=pts;btn.classList.add("correct");feedbackEl.innerText=(lang()==="hi"?"सही! +":"Correct! +")+pts;feedbackEl.className="good";if(navigator.vibrate)navigator.vibrate(40)}else{playWrongSound();lives--;streak=0;btn.classList.add("wrong");all[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"गलत!":"Wrong!";feedbackEl.className="bad";if(navigator.vibrate)navigator.vibrate([60,40,60])}updateStats();setTimeout(next,1100)}
+function timeout(){if(locked)return;locked=true;playWrongSound();lives--;streak=0;document.querySelectorAll(".answerBtn")[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"समय समाप्त!":"Time up!";feedbackEl.className="bad";updateStats();setTimeout(next,1100)}
 
 function next(){if(multiplayer){playerIndex=playerIndex===0?1:0}if(lives<=0){endGame();return}if(mode==="classic"&&questionCount>=10){endGame();return}showQuestion()}
 function updateStats(){scoreEl.innerText=score;streakEl.innerText=streak;livesEl.innerText=lives}
@@ -166,8 +284,15 @@ function clearLeaderboard(){localStorage.removeItem("leaderboard");showLeaderboa
 
 function hideAll(){startScreen.style.display="none";quizScreen.style.display="none";resultScreen.style.display="none";leaderboardScreen.style.display="none"}
 function showStart(){hideAll();startScreen.style.display="block"}
-function toggleMusic(){if(bgMusic.paused){bgMusic.play().then(()=>musicStarted=true).catch(()=>{});}else{bgMusic.pause()}}
-document.addEventListener("visibilitychange",()=>{if(document.hidden)bgMusic.pause();else if(musicStarted)bgMusic.play().catch(()=>{})});
+
+document.addEventListener("visibilitychange",()=>{if(document.hidden){stopBackgroundMusic();}else if(musicEnabled){startBackgroundMusic();}});
+
+document.addEventListener("click",(e)=>{
+    if(e.target.tagName === "BUTTON"){
+        playButtonSound();
+    }
+});
+
 </script>
 </body>
 </html>
