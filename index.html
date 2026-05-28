@@ -22,7 +22,21 @@ button{width:100%;border:none;margin-top:10px;padding:15px;border-radius:18px;fo
 @media(max-width:480px){.gk{font-size:43px}.rush{font-size:24px}#question{font-size:20px}button{font-size:15px;padding:13px}.grid2{grid-template-columns:1fr}}
 </style></head><body><div id="game">
 <div class="logo"><div class="gk">GK QUIZ</div><div class="rush">RUSH</div><div class="tag">PLAY • LEARN • WIN</div></div>
-<div id="startScreen" class="card"><div class="hero">💡</div><h2>Become a Quiz Legend</h2><p class="small">Premium neon quiz with endless questions, achievements, levels, Hindi + English, local leaderboard and multiplayer.</p><input id="playerName" placeholder="Player name" value="Player 1"><div class="grid2"><select id="languageSelect"><option value="en">English</option><option value="hi">Hindi</option></select><select id="categorySelect"><option value="mixed">Mixed GK</option><option value="capital">Capitals</option><option value="currency">Currencies</option><option value="science">Science</option><option value="animal">Animals</option><option value="math">Math</option></select></div><div class="grid2"><button class="btnGold" onclick="startGame('endless')">▶ Endless Play</button><button class="btnGold" onclick="startGame('classic')">⚡ 10 Questions</button></div><div class="grid2"><button class="btnBlue" onclick="startMultiplayer()">👥 2 Player</button><button class="btnBlue" onclick="showLeaderboard()">🏆 Leaderboard</button></div><div class="grid2"><button class="btnBlue" onclick="showAchievements()">🏅 Achievements</button><button class="btnBlue" onclick="toggleMusic()">🎵 Sound</button></div><div id="levelText">Level 1 • XP 0/500</div><div class="xpWrap"><div id="xpBar"></div></div><div class="badge">Daily learning. Endless challenge. Zero paid backend.</div></div>
+<div id="startScreen" class="card"><div class="hero">💡</div><h2>Become a Quiz Legend</h2><p class="small">Premium neon quiz with endless questions, achievements, levels, Hindi + English, local leaderboard and multiplayer.</p><input id="playerName" placeholder="Player name" value="Player 1"><div class="grid2"><select id="languageSelect"><option value="en">English</option><option value="hi">Hindi</option></select><select id="categorySelect">
+<option value="mixed">Mixed GK</option>
+<option value="bollywood">Bollywood</option>
+<option value="geopolitics">World Geo Politics</option>
+<option value="capital">World Capitals</option>
+<option value="currency">Currencies</option>
+<option value="science">Science</option>
+<option value="animal">Animals</option>
+<option value="math">Math</option>
+<option value="sports">Sports</option>
+<option value="history">History</option>
+<option value="technology">Technology</option>
+<option value="planets">Planets & Space</option>
+<option value="leaders">World Leaders</option>
+</select></div><div class="grid2"><button class="btnGold" onclick="startGame('endless')">▶ Endless Play</button><button class="btnGold" onclick="startGame('classic')">⚡ 10 Questions</button></div><div class="grid2"><button class="btnBlue" onclick="startMultiplayer()">👥 2 Player</button><button class="btnBlue" onclick="showLeaderboard()">🏆 Leaderboard</button></div><div class="grid2"><button class="btnBlue" onclick="showAchievements()">🏅 Achievements</button><button class="btnBlue" onclick="toggleMusic()">🎵 Sound</button></div><div id="levelText">Level 1 • XP 0/500</div><div class="xpWrap"><div id="xpBar"></div></div><div class="badge">Daily learning. Endless challenge. Zero paid backend.</div></div>
 <div id="quizScreen"><div id="scoreBar" class="card"><div class="stat"><b id="scoreLabel">Score</b><span id="score">0</span></div><div class="stat"><b id="streakLabel">Streak</b><span id="streak">0</span></div><div class="stat"><b id="livesLabel">Lives</b><span id="lives">3</span></div></div><div id="questionBox" class="card"><div id="playerTurn"></div><div id="questionNumber">Question 1</div><div id="timerWrap"><div id="timerBar"></div></div><div id="question"></div><div id="answers"></div><div id="feedback"></div></div></div>
 <div id="resultScreen" class="card"><div class="hero">🏆</div><h2 id="resultTitle">Quiz Complete!</h2><div id="finalScore" style="font-size:42px;color:var(--cyan);font-weight:900">0</div><div id="highScore" class="small">Best: 0</div><div class="badge" id="rankText">Rank</div><button class="btnGold" onclick="startGame('endless')">Play Again</button><button class="btnBlue" onclick="showLeaderboard()">Leaderboard</button><button class="btnBlue" onclick="showStart()">Main Menu</button></div>
 <div id="leaderboardScreen" class="card"><h2>🏆 Leaderboard</h2><div id="leaderList"></div><button class="btnBlue" onclick="clearLeaderboard()">Clear Leaderboard</button><button class="btnGold" onclick="showStart()">Main Menu</button></div>
@@ -52,160 +66,117 @@ function choose(i,btn){if(locked)return;locked=true;clearInterval(timer);let all
 function timeout(){if(locked)return;locked=true;playWrongSound();lives--;streak=0;document.querySelectorAll(".answerBtn")[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"समय समाप्त!":"Time up!";feedbackEl.className="bad";updateStats();setTimeout(next,1100)}function next(){if(multiplayer)playerIndex=playerIndex===0?1:0;if(lives<=0){endGame();return}if(mode==="classic"&&questionCount>=10){endGame();return}showQuestion()}function updateStats(){scoreEl.innerText=score;streakEl.innerText=streak;livesEl.innerText=lives;if(score>=500)unlock("score500");if(score>=1500)unlock("score1500");if(score>=3000)unlock("score3000");if(mode==="endless"&&questionCount>=20)unlock("endless20")}
 function endGame(){clearInterval(timer);show("resultScreen");let final=multiplayer?Math.max(mpScores[0],mpScores[1]):score,winner=multiplayer?(mpScores[0]>mpScores[1]?mpNames[0]:mpScores[1]>mpScores[0]?mpNames[1]:"Tie"):"";document.getElementById("resultTitle").innerText=multiplayer?("Winner: "+winner):(lang()==="hi"?"क्विज़ समाप्त!":"Quiz Complete!");document.getElementById("finalScore").innerText=multiplayer?`P1 ${mpScores[0]} - P2 ${mpScores[1]}`:score;saveLeaderboard(player(),final);let best=Math.max(...getLeaderboard().map(x=>x.score),0);document.getElementById("highScore").innerText="Best: "+best;document.getElementById("rankText").innerText=final>=3000?"Quiz Legend":final>=1500?"GK Master":final>=700?"Smart Player":"Beginner"}function getLeaderboard(){return JSON.parse(localStorage.getItem("leaderboard")||"[]")}function saveLeaderboard(name,score){let list=getLeaderboard();list.push({name,score,date:new Date().toLocaleDateString()});list.sort((a,b)=>b.score-a.score);localStorage.setItem("leaderboard",JSON.stringify(list.slice(0,10)))}function showLeaderboard(){show("leaderboardScreen");let list=getLeaderboard();document.getElementById("leaderList").innerHTML=list.length?list.map((x,i)=>`<div class="leaderItem"><span>${i+1}. ${x.name}</span><b>${x.score}</b></div>`).join(""):"No scores yet."}function clearLeaderboard(){localStorage.removeItem("leaderboard");showLeaderboard()}function showAchievements(){show("achievementScreen");renderAchievements()}function showToast(t){let el=document.createElement("div");el.className="toast";el.innerText=t;document.body.appendChild(el);setTimeout(()=>el.remove(),1800)}function particles(){for(let i=0;i<14;i++){let p=document.createElement("div");p.className="particle";p.style.left=(innerWidth/2)+"px";p.style.top="145px";document.body.appendChild(p);let x=(Math.random()-.5)*260,y=(Math.random()-.5)*220;p.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${x}px,${y}px)`,opacity:0}],{duration:800});setTimeout(()=>p.remove(),800)}}document.addEventListener("visibilitychange",()=>{if(document.hidden)stopBackgroundMusic();else if(musicEnabled)startBackgroundMusic()});updateXP();renderAchievements();
 
-// ===== MASSIVE QUESTION ENGINE =====
-const megaData = {
-bollywoodActors:["Shah Rukh Khan","Salman Khan","Aamir Khan","Hrithik Roshan","Ranbir Kapoor","Ranveer Singh","Akshay Kumar","Ajay Devgn","Amitabh Bachchan","Rajinikanth"],
-bollywoodMovies:["DDLJ","3 Idiots","Sholay","PK","Dangal","Lagaan","Krrish","War","Pathaan","Jawan"],
-countries:["India","USA","China","Russia","Japan","Germany","France","Brazil","Uganda","Kenya","Canada","Australia","Italy","Spain","UAE"],
-capitals:["New Delhi","Washington D.C.","Beijing","Moscow","Tokyo","Berlin","Paris","Brasilia","Kampala","Nairobi","Ottawa","Canberra","Rome","Madrid","Abu Dhabi"],
-leaders:["Narendra Modi","Joe Biden","Xi Jinping","Vladimir Putin","Emmanuel Macron","Justin Trudeau"],
-sports:["Cricket","Football","Tennis","Basketball","Hockey","Kabaddi","Formula 1"],
-companies:["Google","Apple","Microsoft","Tesla","Amazon","Meta","OpenAI","Samsung"],
-planets:["Mercury","Venus","Earth","Mars","Jupiter","Saturn","Uranus","Neptune"],
-animals:["Tiger","Lion","Elephant","Cheetah","Blue Whale","Giraffe","Panda","Kangaroo"],
-currencies:["Rupee","Dollar","Yen","Euro","Pound","Dirham","Yuan"],
-science:["Gravity","Photosynthesis","DNA","Atom","Oxygen","Electricity","Magnetism","Evolution"],
-history:["World War 2","French Revolution","Independence Day","Roman Empire","Cold War","Industrial Revolution"],
-geoPolitics:["NATO","United Nations","BRICS","G20","European Union","ASEAN","OPEC"]
+
+// ===== PLAY STORE SAFE ROBUST QUESTION ENGINE =====
+const categoryBanks = {
+    bollywood: [
+        {q:"Which of these is a famous Bollywood actor?", a:["Shah Rukh Khan","Lionel Messi","Elon Musk","Virat Kohli"], c:0, hq:"इनमें से कौन प्रसिद्ध बॉलीवुड अभिनेता हैं?", ha:["शाहरुख खान","लियोनेल मेसी","एलन मस्क","विराट कोहली"]},
+        {q:"Which of these is a Bollywood movie?", a:["Sholay","Titanic","Avatar","Inception"], c:0, hq:"इनमें से कौन सी बॉलीवुड फिल्म है?", ha:["शोले","टाइटैनिक","अवतार","इंसेप्शन"]},
+        {q:"Who is popularly called Big B in Bollywood?", a:["Amitabh Bachchan","Salman Khan","Aamir Khan","Ranbir Kapoor"], c:0, hq:"बॉलीवुड में बिग बी किसे कहा जाता है?", ha:["अमिताभ बच्चन","सलमान खान","आमिर खान","रणबीर कपूर"]},
+        {q:"Which Bollywood film is known for the dialogue 'Kitne aadmi the'?", a:["Sholay","Dangal","War","PK"], c:0, hq:"'कितने आदमी थे' संवाद किस फिल्म से जुड़ा है?", ha:["शोले","दंगल","वॉर","पीके"]},
+        {q:"Which actor is known as Mr. Perfectionist in Bollywood?", a:["Aamir Khan","Akshay Kumar","Ajay Devgn","Hrithik Roshan"], c:0, hq:"बॉलीवुड में मिस्टर परफेक्शनिस्ट किसे कहा जाता है?", ha:["आमिर खान","अक्षय कुमार","अजय देवगन","ऋतिक रोशन"]}
+    ],
+    geopolitics: [
+        {q:"What is the United Nations mainly created for?", a:["International peace and cooperation","Cricket tournaments","Movie awards","Space tourism"], c:0, hq:"संयुक्त राष्ट्र मुख्य रूप से किस लिए बनाया गया था?", ha:["अंतरराष्ट्रीय शांति और सहयोग","क्रिकेट टूर्नामेंट","फिल्म पुरस्कार","अंतरिक्ष पर्यटन"]},
+        {q:"Which organization is a military alliance?", a:["NATO","FIFA","OPEC","UNESCO"], c:0, hq:"इनमें से कौन सा सैन्य गठबंधन है?", ha:["नाटो","फीफा","ओपेक","यूनेस्को"]},
+        {q:"BRICS originally refers to a group of what?", a:["Emerging economies","European football clubs","Space agencies","Oil companies"], c:0, hq:"BRICS मूल रूप से किस समूह को दर्शाता है?", ha:["उभरती अर्थव्यवस्थाएँ","यूरोपीय फुटबॉल क्लब","अंतरिक्ष एजेंसियाँ","तेल कंपनियाँ"]},
+        {q:"Which body has permanent members with veto power?", a:["UN Security Council","FIFA Council","Olympic Committee","World Bank Board"], c:0, hq:"किस संस्था में वीटो शक्ति वाले स्थायी सदस्य होते हैं?", ha:["संयुक्त राष्ट्र सुरक्षा परिषद","फीफा परिषद","ओलंपिक समिति","विश्व बैंक बोर्ड"]},
+        {q:"What does G20 mainly represent?", a:["Major global economies","Twenty movie studios","Twenty planets","A cricket league"], c:0, hq:"G20 मुख्य रूप से क्या दर्शाता है?", ha:["प्रमुख वैश्विक अर्थव्यवस्थाएँ","बीस फिल्म स्टूडियो","बीस ग्रह","क्रिकेट लीग"]},
+        {q:"OPEC is mainly related to which resource?", a:["Oil","Gold","Water","Wheat"], c:0, hq:"OPEC मुख्य रूप से किस संसाधन से संबंधित है?", ha:["तेल","सोना","पानी","गेहूं"]},
+        {q:"The European Union is primarily a union of countries from which region?", a:["Europe","South America","Africa","Antarctica"], c:0, hq:"यूरोपीय संघ मुख्य रूप से किस क्षेत्र के देशों का संघ है?", ha:["यूरोप","दक्षिण अमेरिका","अफ्रीका","अंटार्कटिका"]},
+        {q:"Which institution is known for international monetary cooperation?", a:["IMF","ICC","NASA","Netflix"], c:0, hq:"कौन सी संस्था अंतरराष्ट्रीय मौद्रिक सहयोग के लिए जानी जाती है?", ha:["आईएमएफ","आईसीसी","नासा","नेटफ्लिक्स"]},
+        {q:"ASEAN is mainly associated with which region?", a:["Southeast Asia","North America","Arctic region","Western Europe"], c:0, hq:"ASEAN मुख्य रूप से किस क्षेत्र से संबंधित है?", ha:["दक्षिण-पूर्व एशिया","उत्तरी अमेरिका","आर्कटिक क्षेत्र","पश्चिमी यूरोप"]},
+        {q:"What is diplomacy?", a:["Managing relations between countries","A type of dance","A computer virus","A sports trophy"], c:0, hq:"कूटनीति क्या है?", ha:["देशों के बीच संबंधों का प्रबंधन","एक प्रकार का नृत्य","कंप्यूटर वायरस","खेल ट्रॉफी"]}
+    ],
+    capital: [
+        {q:"What is the capital of India?", a:["New Delhi","Mumbai","Kolkata","Chennai"], c:0, hq:"भारत की राजधानी क्या है?", ha:["नई दिल्ली","मुंबई","कोलकाता","चेन्नई"]},
+        {q:"What is the capital of Uganda?", a:["Kampala","Nairobi","Accra","Cairo"], c:0, hq:"युगांडा की राजधानी क्या है?", ha:["कंपाला","नैरोबी","अकरा","काहिरा"]},
+        {q:"What is the capital of Japan?", a:["Tokyo","Kyoto","Osaka","Seoul"], c:0, hq:"जापान की राजधानी क्या है?", ha:["टोक्यो","क्योटो","ओसाका","सियोल"]},
+        {q:"What is the capital of France?", a:["Paris","Rome","Berlin","Madrid"], c:0, hq:"फ्रांस की राजधानी क्या है?", ha:["पेरिस","रोम","बर्लिन","मैड्रिड"]}
+    ],
+    currency: [
+        {q:"What is the currency of India?", a:["Rupee","Yen","Euro","Dollar"], c:0, hq:"भारत की मुद्रा क्या है?", ha:["रुपया","येन","यूरो","डॉलर"]},
+        {q:"What is the currency of Japan?", a:["Yen","Rupee","Pound","Dirham"], c:0, hq:"जापान की मुद्रा क्या है?", ha:["येन","रुपया","पाउंड","दिरहम"]},
+        {q:"What is the currency of Uganda?", a:["Ugandan Shilling","Euro","Yuan","Dollar"], c:0, hq:"युगांडा की मुद्रा क्या है?", ha:["युगांडन शिलिंग","यूरो","युआन","डॉलर"]}
+    ],
+    science: [
+        {q:"What gas do humans breathe in to survive?", a:["Oxygen","Carbon Dioxide","Helium","Nitrogen"], c:0, hq:"मनुष्य जीवित रहने के लिए कौन सी गैस सांस लेते हैं?", ha:["ऑक्सीजन","कार्बन डाइऑक्साइड","हीलियम","नाइट्रोजन"]},
+        {q:"What is H2O commonly known as?", a:["Water","Salt","Oxygen","Gold"], c:0, hq:"H2O को सामान्यतः क्या कहा जाता है?", ha:["पानी","नमक","ऑक्सीजन","सोना"]},
+        {q:"Which force pulls objects toward Earth?", a:["Gravity","Magnetism","Friction","Sound"], c:0, hq:"कौन सा बल वस्तुओं को पृथ्वी की ओर खींचता है?", ha:["गुरुत्वाकर्षण","चुंबकत्व","घर्षण","ध्वनि"]}
+    ],
+    animal: [
+        {q:"Which is the fastest land animal?", a:["Cheetah","Lion","Horse","Tiger"], c:0, hq:"सबसे तेज जमीन वाला जानवर कौन सा है?", ha:["चीता","शेर","घोड़ा","बाघ"]},
+        {q:"Which is the largest land animal?", a:["Elephant","Giraffe","Rhino","Hippo"], c:0, hq:"सबसे बड़ा स्थलीय जानवर कौन सा है?", ha:["हाथी","जिराफ","गैंडा","दरियाई घोड़ा"]},
+        {q:"Which animal is called the ship of the desert?", a:["Camel","Horse","Yak","Goat"], c:0, hq:"किस जानवर को रेगिस्तान का जहाज कहा जाता है?", ha:["ऊंट","घोड़ा","याक","बकरी"]}
+    ],
+    math: [
+        {q:"What is the smallest prime number?", a:["2","1","3","0"], c:0, hq:"सबसे छोटी अभाज्य संख्या क्या है?", ha:["2","1","3","0"]},
+        {q:"What is 12 × 12?", a:["144","124","122","154"], c:0, hq:"12 × 12 कितना होता है?", ha:["144","124","122","154"]},
+        {q:"How many sides does a triangle have?", a:["3","4","5","6"], c:0, hq:"त्रिभुज की कितनी भुजाएँ होती हैं?", ha:["3","4","5","6"]}
+    ],
+    sports: [
+        {q:"How many players are there in a cricket team on the field?", a:["11","9","10","12"], c:0, hq:"क्रिकेट टीम में मैदान पर कितने खिलाड़ी होते हैं?", ha:["11","9","10","12"]},
+        {q:"Which sport is FIFA associated with?", a:["Football","Cricket","Tennis","Hockey"], c:0, hq:"FIFA किस खेल से जुड़ा है?", ha:["फुटबॉल","क्रिकेट","टेनिस","हॉकी"]},
+        {q:"Which sport uses a racket and shuttlecock?", a:["Badminton","Cricket","Football","Kabaddi"], c:0, hq:"किस खेल में रैकेट और शटलकॉक का उपयोग होता है?", ha:["बैडमिंटन","क्रिकेट","फुटबॉल","कबड्डी"]}
+    ],
+    history: [
+        {q:"In which year did India become independent?", a:["1947","1950","1930","1962"], c:0, hq:"भारत किस वर्ष स्वतंत्र हुआ?", ha:["1947","1950","1930","1962"]},
+        {q:"Which war ended in 1945?", a:["World War II","World War I","Cold War","Vietnam War"], c:0, hq:"कौन सा युद्ध 1945 में समाप्त हुआ?", ha:["द्वितीय विश्व युद्ध","प्रथम विश्व युद्ध","शीत युद्ध","वियतनाम युद्ध"]},
+        {q:"Who was the first Prime Minister of India?", a:["Jawaharlal Nehru","Mahatma Gandhi","Sardar Patel","Rajendra Prasad"], c:0, hq:"भारत के पहले प्रधानमंत्री कौन थे?", ha:["जवाहरलाल नेहरू","महात्मा गांधी","सरदार पटेल","राजेंद्र प्रसाद"]}
+    ],
+    technology: [
+        {q:"Which company created Android?", a:["Google","Apple","Microsoft","Tesla"], c:0, hq:"Android किस कंपनी ने बनाया?", ha:["गूगल","एप्पल","माइक्रोसॉफ्ट","टेस्ला"]},
+        {q:"Which company makes the iPhone?", a:["Apple","Samsung","Google","Nokia"], c:0, hq:"iPhone कौन सी कंपनी बनाती है?", ha:["एप्पल","सैमसंग","गूगल","नोकिया"]},
+        {q:"What does AI stand for?", a:["Artificial Intelligence","Auto Internet","Advanced India","Applied Input"], c:0, hq:"AI का पूरा नाम क्या है?", ha:["आर्टिफिशियल इंटेलिजेंस","ऑटो इंटरनेट","एडवांस्ड इंडिया","एप्लाइड इनपुट"]}
+    ],
+    planets: [
+        {q:"Which planet is known as the Red Planet?", a:["Mars","Earth","Venus","Jupiter"], c:0, hq:"किस ग्रह को लाल ग्रह कहा जाता है?", ha:["मंगल","पृथ्वी","शुक्र","बृहस्पति"]},
+        {q:"Which is the largest planet in our solar system?", a:["Jupiter","Mars","Mercury","Earth"], c:0, hq:"हमारे सौरमंडल का सबसे बड़ा ग्रह कौन सा है?", ha:["बृहस्पति","मंगल","बुध","पृथ्वी"]},
+        {q:"Which planet is closest to the Sun?", a:["Mercury","Venus","Earth","Mars"], c:0, hq:"सूर्य के सबसे निकट कौन सा ग्रह है?", ha:["बुध","शुक्र","पृथ्वी","मंगल"]}
+    ],
+    leaders: [
+        {q:"Who is associated with India's independence movement?", a:["Mahatma Gandhi","Napoleon","Einstein","Shakespeare"], c:0, hq:"भारत के स्वतंत्रता आंदोलन से कौन जुड़े हैं?", ha:["महात्मा गांधी","नेपोलियन","आइंस्टीन","शेक्सपीयर"]},
+        {q:"Which leader was known as the Iron Man of India?", a:["Sardar Patel","Jawaharlal Nehru","Subhas Chandra Bose","B. R. Ambedkar"], c:0, hq:"भारत के लौह पुरुष किसे कहा जाता है?", ha:["सरदार पटेल","जवाहरलाल नेहरू","सुभाष चंद्र बोस","बी. आर. आंबेडकर"]},
+        {q:"Who was the first President of India?", a:["Dr. Rajendra Prasad","Dr. A. P. J. Abdul Kalam","Sardar Patel","Lal Bahadur Shastri"], c:0, hq:"भारत के पहले राष्ट्रपति कौन थे?", ha:["डॉ. राजेंद्र प्रसाद","डॉ. ए. पी. जे. अब्दुल कलाम","सरदार पटेल","लाल बहादुर शास्त्री"]}
+    ]
 };
 
-function randomOf(arr){ return arr[Math.floor(Math.random()*arr.length)] }
-
-function generateMegaQuestion(){
-    const type = Math.floor(Math.random()*12);
-    const L = lang();
-
-    if(type===0){
-        let actor=randomOf(megaData.bollywoodActors);
-        let movie=randomOf(megaData.bollywoodMovies);
-        let correct=movie;
-        let opts=shuffle([correct,...shuffle(megaData.bollywoodMovies.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `${actor} किस फिल्म से जुड़े हैं?` : `${actor} is associated with which movie?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===1){
-        let country=randomOf(megaData.countries);
-        let capital=randomOf(megaData.capitals);
-        let correct=capital;
-        let opts=shuffle([correct,...shuffle(megaData.capitals.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `${country} की राजधानी क्या है?` : `What is the capital of ${country}?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===2){
-        let company=randomOf(megaData.companies);
-        let correct=company;
-        let opts=shuffle([correct,...shuffle(megaData.companies.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `${company} किस प्रकार की कंपनी है?` : `${company} belongs to which technology sector?`,
-            a:["Technology","Automobile","Food","Sports"],
-            c:0
-        };
-    }
-
-    if(type===3){
-        let topic=randomOf(megaData.geoPolitics);
-        let correct=topic;
-        let opts=shuffle([correct,...shuffle(megaData.geoPolitics.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन सा वैश्विक संगठन है?` : `Which of these is a major global organization?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===4){
-        let planet=randomOf(megaData.planets);
-        let correct=planet;
-        let opts=shuffle([correct,...shuffle(megaData.planets.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन सा ग्रह है?` : `Which of these is a planet?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===5){
-        let animal=randomOf(megaData.animals);
-        let correct=animal;
-        let opts=shuffle([correct,...shuffle(megaData.animals.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन सा जानवर है?` : `Which of these is an animal?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===6){
-        let leader=randomOf(megaData.leaders);
-        let correct=leader;
-        let opts=shuffle([correct,...shuffle(megaData.leaders.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन विश्व नेता हैं?` : `Which of these is a world leader?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===7){
-        let sport=randomOf(megaData.sports);
-        let correct=sport;
-        let opts=shuffle([correct,...shuffle(megaData.sports.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन सा खेल है?` : `Which of these is a sport?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===8){
-        let sci=randomOf(megaData.science);
-        let correct=sci;
-        let opts=shuffle([correct,...shuffle(megaData.science.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन वैज्ञानिक विषय है?` : `Which of these is a scientific concept?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===9){
-        let hist=randomOf(megaData.history);
-        let correct=hist;
-        let opts=shuffle([correct,...shuffle(megaData.history.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन ऐतिहासिक घटना है?` : `Which of these is a historical event?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    if(type===10){
-        let currency=randomOf(megaData.currencies);
-        let correct=currency;
-        let opts=shuffle([correct,...shuffle(megaData.currencies.filter(x=>x!==correct)).slice(0,3)]);
-        return {
-            q:L==="hi" ? `इनमें से कौन मुद्रा है?` : `Which of these is a currency?`,
-            a:opts,
-            c:opts.indexOf(correct)
-        };
-    }
-
-    let actor=randomOf(megaData.bollywoodActors);
-    let correct=actor;
-    let opts=shuffle([correct,...shuffle(megaData.bollywoodActors.filter(x=>x!==correct)).slice(0,3)]);
+function shuffleAnswerObject(item){
+    const useHindi = lang() === "hi";
+    const questionText = useHindi ? item.hq : item.q;
+    const answers = useHindi ? item.ha : item.a;
+    const correctAnswer = answers[item.c];
+    const shuffled = shuffle(answers);
     return {
-        q:L==="hi" ? `इनमें से कौन बॉलीवुड अभिनेता है?` : `Which of these is a Bollywood actor?`,
-        a:opts,
-        c:opts.indexOf(correct)
+        q: questionText,
+        a: shuffled,
+        c: shuffled.indexOf(correctAnswer)
     };
+}
+
+function generateQuestionBySelectedCategory(){
+    let selected = cat();
+
+    if(!categoryBanks[selected]){
+        selected = "mixed";
+    }
+
+    if(selected === "mixed"){
+        const keys = Object.keys(categoryBanks).filter(k => k !== "mixed");
+        selected = pick(keys);
+    }
+
+    const bank = categoryBanks[selected];
+
+    if(!bank || bank.length === 0){
+        return {
+            q: "Which organization is mainly created for international peace and cooperation?",
+            a: ["United Nations","FIFA","Netflix","NASA"],
+            c: 0
+        };
+    }
+
+    return shuffleAnswerObject(pick(bank));
 }
 
 </script></body></html>
