@@ -39,6 +39,148 @@ select,input{background:#121b2d;color:white;border:1px solid rgba(255,255,255,.1
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .leaderItem{display:flex;justify-content:space-between;background:rgba(0,0,0,.25);border-radius:14px;padding:10px;margin-top:8px}
 @media(max-width:480px){h1{font-size:30px}#question{font-size:20px}.answerBtn{font-size:16px;padding:14px}.grid2{grid-template-columns:1fr}}
+
+:root{
+    --gold:#ffd54a;
+    --cyan:#00ffcc;
+    --pink:#ff66ff;
+    --dark:#07101f;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,213,74,.16),transparent 25%),
+        radial-gradient(circle at 80% 10%,rgba(0,255,204,.13),transparent 28%),
+        radial-gradient(circle at 50% 90%,rgba(255,102,255,.12),transparent 28%);
+    pointer-events:none;
+    animation:bgPulse 5s ease-in-out infinite alternate;
+}
+
+@keyframes bgPulse{
+    from{opacity:.7;transform:scale(1)}
+    to{opacity:1;transform:scale(1.04)}
+}
+
+.card{
+    backdrop-filter:blur(10px);
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:80%;
+    height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+    animation:shine 4s infinite;
+}
+
+@keyframes shine{
+    0%{left:-120%}
+    45%{left:120%}
+    100%{left:120%}
+}
+
+.xpWrap{
+    margin-top:12px;
+    background:#111827;
+    height:14px;
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.15);
+}
+
+#xpBar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--cyan),var(--gold));
+    transition:width .45s ease;
+}
+
+#levelText{
+    margin-top:8px;
+    color:var(--gold);
+    font-weight:bold;
+}
+
+.comboFlash{
+    animation:comboFlash .45s ease;
+}
+
+@keyframes comboFlash{
+    0%{transform:scale(1)}
+    50%{transform:scale(1.08);text-shadow:0 0 18px var(--pink)}
+    100%{transform:scale(1)}
+}
+
+.achievementPanel{
+    margin-top:14px;
+    max-height:220px;
+    overflow-y:auto;
+}
+
+.achItem{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    background:rgba(0,0,0,.25);
+    border-radius:14px;
+    padding:10px;
+    margin-top:8px;
+    color:#bbb;
+}
+
+.achItem.unlocked{
+    color:var(--cyan);
+    box-shadow:0 0 12px rgba(0,255,204,.22);
+}
+
+.achReward{
+    font-size:12px;
+    color:var(--gold);
+}
+
+#progressRing{
+    width:86px;
+    height:86px;
+    border-radius:50%;
+    margin:10px auto;
+    background:conic-gradient(var(--cyan) 0deg,rgba(255,255,255,.14) 0deg);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-shadow:0 0 20px rgba(0,255,204,.2);
+}
+
+#progressRingInner{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    background:#111827;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+    color:var(--gold);
+}
+
+.particle{
+    position:fixed;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--gold);
+    pointer-events:none;
+    z-index:1000;
+}
+
 </style>
 </head>
 <body>
@@ -62,10 +204,12 @@ select,input{background:#121b2d;color:white;border:1px solid rgba(255,255,255,.1
 </div>
 <div class="grid2">
 <button class="mainBtn darkBtn" onclick="startMultiplayer()">2 Player Mode</button>
-<button class="mainBtn darkBtn" onclick="showLeaderboard()">Leaderboard</button>
+<button class="mainBtn darkBtn" onclick="showLeaderboard()">Leaderboard</button><button class="mainBtn darkBtn" onclick="showAchievements()">Achievements</button>
 </div>
 <button class="mainBtn darkBtn" onclick="toggleMusic()">🎵 Music / Sound On-Off</button>
-<div class="badge" id="menuBadge">Music • Button Sounds • Streak Bonus • Hindi + English</div>
+<div class="badge" id="menuBadge">Music • Button Sounds • Achievements • Hindi + English</div>
+<div id="levelText">Level 1 • XP 0/500</div>
+<div class="xpWrap"><div id="xpBar"></div></div>
 </div>
 
 <div id="quizScreen">
@@ -77,6 +221,7 @@ select,input{background:#121b2d;color:white;border:1px solid rgba(255,255,255,.1
 <div class="card">
 <div id="playerTurn"></div>
 <div id="questionNumber">Question 1</div>
+<div id="progressRing"><div id="progressRingInner">0%</div></div>
 <div id="timerWrap"><div id="timerBar"></div></div>
 <div id="question">Question text</div>
 <div id="answers"></div>
@@ -91,13 +236,19 @@ select,input{background:#121b2d;color:white;border:1px solid rgba(255,255,255,.1
 <div class="badge" id="rankText">Rank</div>
 <button class="mainBtn" onclick="startGame('endless')">Play Again</button>
 <button class="mainBtn darkBtn" onclick="showStart()">Main Menu</button>
-<button class="mainBtn darkBtn" onclick="showLeaderboard()">Leaderboard</button>
+<button class="mainBtn darkBtn" onclick="showLeaderboard()">Leaderboard</button><button class="mainBtn darkBtn" onclick="showAchievements()">Achievements</button>
 </div>
 
 <div id="leaderboardScreen" class="card">
 <h2>🏆 Leaderboard</h2>
 <div id="leaderList"></div>
 <button class="mainBtn darkBtn" onclick="clearLeaderboard()">Clear Leaderboard</button>
+<button class="mainBtn" onclick="showStart()">Main Menu</button>
+</div>
+
+<div id="achievementScreen" class="card" style="display:none">
+<h2>🏅 Achievements</h2>
+<div id="achievementList" class="achievementPanel"></div>
 <button class="mainBtn" onclick="showStart()">Main Menu</button>
 </div>
 </div>
@@ -263,18 +414,31 @@ function makeFixed(){let f=pick(fixed),L=lang();return {q:L==="hi"?f.hi:f.en,a:L
 
 function getQuestion(){return Math.random()<.25 && cat()==="mixed"?makeFixed():makeGenerated()}
 
-function startGame(m){initAudio();startBackgroundMusic();playButtonSound();multiplayer=false;mode=m;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
-function startMultiplayer(){initAudio();startBackgroundMusic();playButtonSound();multiplayer=true;mode="classic";mpNames=[player(),"Player 2"];mpScores=[0,0];playerIndex=0;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
+function startGame(m){initAudio();startBackgroundMusic();playButtonSound();unlockAchievement("firstPlay"); if(lang()==="hi")unlockAchievement("hindi"); if(cat()!=="mixed")unlockAchievement("category");multiplayer=false;mode=m;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
+function startMultiplayer(){initAudio();startBackgroundMusic();playButtonSound();unlockAchievement("multiplayer");multiplayer=true;mode="classic";mpNames=[player(),"Player 2"];mpScores=[0,0];playerIndex=0;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
 
 function updateLabels(){let L=lang();document.getElementById("scoreLabel").innerText=L==="hi"?"स्कोर":"Score";document.getElementById("streakLabel").innerText=L==="hi"?"स्ट्रीक":"Streak";document.getElementById("livesLabel").innerText=L==="hi"?"लाइफ":"Lives"}
 
 function showQuestion(){clearInterval(timer);locked=false;timeLeft=15;timerBar.style.width="100%";feedbackEl.innerText="";feedbackEl.className="";current=getQuestion();questionCount++;document.getElementById("questionNumber").innerText=(lang()==="hi"?"प्रश्न ":"Question ")+questionCount+(mode==="classic"?"/10":" • Endless");document.getElementById("playerTurn").innerText=multiplayer?("Turn: "+mpNames[playerIndex]+" | P1 "+mpScores[0]+" - P2 "+mpScores[1]):"";questionEl.innerText=current.q;answersEl.innerHTML="";current.a.forEach((ans,i)=>{let b=document.createElement("button");b.className="answerBtn";b.innerText=ans;b.onclick=()=>choose(i,b);answersEl.appendChild(b)});timer=setInterval(()=>{timeLeft-=.2;timerBar.style.width=Math.max(0,(timeLeft/15)*100)+"%";if(timeLeft <= 5 && Math.abs(timeLeft - Math.round(timeLeft)) < 0.11){playTickSound()} if(timeLeft<=0){clearInterval(timer);timeout()}},200)}
 
-function choose(i,btn){if(locked)return;locked=true;clearInterval(timer);let all=document.querySelectorAll(".answerBtn");if(i===current.c){playCorrectSound();streak++;let pts=100+(streak>=3?50:0)+Math.round(timeLeft*5);score+=pts;if(multiplayer)mpScores[playerIndex]+=pts;btn.classList.add("correct");feedbackEl.innerText=(lang()==="hi"?"सही! +":"Correct! +")+pts;feedbackEl.className="good";if(navigator.vibrate)navigator.vibrate(40)}else{playWrongSound();lives--;streak=0;btn.classList.add("wrong");all[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"गलत!":"Wrong!";feedbackEl.className="bad";if(navigator.vibrate)navigator.vibrate([60,40,60])}updateStats();setTimeout(next,1100)}
+function choose(i,btn){if(locked)return;locked=true;clearInterval(timer);let all=document.querySelectorAll(".answerBtn");if(i===current.c){playCorrectSound();streak++;let pts=100+(streak>=3?50:0)+Math.round(timeLeft*5);score+=pts;if(multiplayer)mpScores[playerIndex]+=pts;btn.classList.add("correct");feedbackEl.innerText=(lang()==="hi"?"सही! +":"Correct! +")+pts;feedbackEl.className="good";if(navigator.vibrate)navigator.vibrate(40);spawnParticles()}else{playWrongSound();lives--;streak=0;btn.classList.add("wrong");all[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"गलत!":"Wrong!";feedbackEl.className="bad";if(navigator.vibrate)navigator.vibrate([60,40,60])}updateStats();setTimeout(next,1100)}
 function timeout(){if(locked)return;locked=true;playWrongSound();lives--;streak=0;document.querySelectorAll(".answerBtn")[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"समय समाप्त!":"Time up!";feedbackEl.className="bad";updateStats();setTimeout(next,1100)}
 
 function next(){if(multiplayer){playerIndex=playerIndex===0?1:0}if(lives<=0){endGame();return}if(mode==="classic"&&questionCount>=10){endGame();return}showQuestion()}
-function updateStats(){scoreEl.innerText=score;streakEl.innerText=streak;livesEl.innerText=lives}
+function updateStats(){
+scoreEl.innerText=score;streakEl.innerText=streak;livesEl.innerText=lives;
+if(score>=500)unlockAchievement("score500");
+if(score>=1500)unlockAchievement("score1500");
+if(score>=3000)unlockAchievement("score3000");
+const ring=document.getElementById("progressRing");
+const inner=document.getElementById("progressRingInner");
+if(ring&&inner){
+    let progress = mode==="classic" ? Math.min(100, Math.round((questionCount/10)*100)) : Math.min(100, Math.round((questionCount/20)*100));
+    ring.style.background = `conic-gradient(var(--cyan) ${progress*3.6}deg,rgba(255,255,255,.14) 0deg)`;
+    inner.innerText = progress + "%";
+}
+if(mode==="endless" && questionCount>=20)unlockAchievement("endless20");
+}
 function endGame(){clearInterval(timer);hideAll();resultScreen.style.display="block";let final=multiplayer?Math.max(mpScores[0],mpScores[1]):score;let winner=multiplayer?(mpScores[0]>mpScores[1]?mpNames[0]:mpScores[1]>mpScores[0]?mpNames[1]:"Tie"):"";document.getElementById("resultTitle").innerText=multiplayer?("Winner: "+winner):(lang()==="hi"?"क्विज़ समाप्त!":"Quiz Complete!");document.getElementById("finalScore").innerText=multiplayer?("P1 "+mpScores[0]+" - P2 "+mpScores[1]):score;saveLeaderboard(player(),final);let best=Math.max(...getLeaderboard().map(x=>x.score),0);document.getElementById("highScore").innerText="Best: "+best;document.getElementById("rankText").innerText=final>=3000?"Quiz Legend":final>=1500?"GK Master":final>=700?"Smart Player":"Beginner"}
 
 function getLeaderboard(){return JSON.parse(localStorage.getItem("leaderboard")||"[]")}
@@ -282,7 +446,7 @@ function saveLeaderboard(name,score){let list=getLeaderboard();list.push({name,s
 function showLeaderboard(){hideAll();leaderboardScreen.style.display="block";let list=getLeaderboard();document.getElementById("leaderList").innerHTML=list.length?list.map((x,i)=>`<div class="leaderItem"><span>${i+1}. ${x.name}</span><b>${x.score}</b></div>`).join(""):"No scores yet."}
 function clearLeaderboard(){localStorage.removeItem("leaderboard");showLeaderboard()}
 
-function hideAll(){startScreen.style.display="none";quizScreen.style.display="none";resultScreen.style.display="none";leaderboardScreen.style.display="none"}
+function hideAll(){startScreen.style.display="none";quizScreen.style.display="none";resultScreen.style.display="none";leaderboardScreen.style.display="none"; const ach=document.getElementById("achievementScreen"); if(ach)ach.style.display="none"}
 function showStart(){hideAll();startScreen.style.display="block"}
 
 document.addEventListener("visibilitychange",()=>{if(document.hidden){stopBackgroundMusic();}else if(musicEnabled){startBackgroundMusic();}});
@@ -292,6 +456,89 @@ document.addEventListener("click",(e)=>{
         playButtonSound();
     }
 });
+
+
+const achievementDefs = [
+    {id:"firstPlay",name:"First Challenge",desc:"Start your first quiz",reward:50},
+    {id:"score500",name:"Quick Learner",desc:"Reach 500 score",reward:100},
+    {id:"score1500",name:"GK Warrior",desc:"Reach 1500 score",reward:150},
+    {id:"score3000",name:"Quiz Master",desc:"Reach 3000 score",reward:250},
+    {id:"streak3",name:"Hot Streak",desc:"Get 3 correct in a row",reward:100},
+    {id:"streak7",name:"Unstoppable",desc:"Get 7 correct in a row",reward:200},
+    {id:"endless20",name:"Endless Mind",desc:"Answer 20 endless questions",reward:300},
+    {id:"multiplayer",name:"Social Player",desc:"Play multiplayer mode",reward:100},
+    {id:"hindi",name:"Hindi Champion",desc:"Play in Hindi mode",reward:100},
+    {id:"category",name:"Specialist",desc:"Play a specific category",reward:100}
+];
+
+let unlockedAchievements = JSON.parse(localStorage.getItem("quizAchievements") || "[]");
+let playerXP = parseInt(localStorage.getItem("playerXP") || "0");
+
+function getLevel(){
+    return Math.floor(playerXP / 500) + 1;
+}
+
+function updateXPUI(){
+    const levelText = document.getElementById("levelText");
+    const xpBar = document.getElementById("xpBar");
+    if(!levelText || !xpBar) return;
+    const level = getLevel();
+    const current = playerXP % 500;
+    levelText.innerText = "Level " + level + " • XP " + current + "/500";
+    xpBar.style.width = (current / 500 * 100) + "%";
+}
+
+function unlockAchievement(id){
+    if(unlockedAchievements.includes(id)) return;
+    const ach = achievementDefs.find(a=>a.id===id);
+    if(!ach) return;
+
+    unlockedAchievements.push(id);
+    localStorage.setItem("quizAchievements",JSON.stringify(unlockedAchievements));
+
+    playerXP += ach.reward;
+    localStorage.setItem("playerXP",playerXP);
+
+    showToast("🏅 " + ach.name + " +" + ach.reward + " XP");
+    updateXPUI();
+    renderAchievements();
+}
+
+function renderAchievements(){
+    const list = document.getElementById("achievementList");
+    if(!list) return;
+
+    list.innerHTML = achievementDefs.map(a=>{
+        const done = unlockedAchievements.includes(a.id);
+        return `<div class="achItem ${done ? "unlocked" : ""}">
+            <div>${done ? "✅" : "🔒"} <b>${a.name}</b><br><small>${a.desc}</small></div>
+            <div class="achReward">+${a.reward} XP</div>
+        </div>`;
+    }).join("");
+}
+
+function showAchievements(){
+    hideAll();
+    document.getElementById("achievementScreen").style.display="block";
+    renderAchievements();
+}
+
+function spawnParticles(){
+    for(let i=0;i<16;i++){
+        const p=document.createElement("div");
+        p.className="particle";
+        p.style.left=(window.innerWidth/2)+"px";
+        p.style.top="120px";
+        document.body.appendChild(p);
+        const x=(Math.random()-.5)*260;
+        const y=(Math.random()-.5)*220;
+        p.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${x}px,${y}px)`,opacity:0}],{duration:800});
+        setTimeout(()=>p.remove(),800);
+    }
+}
+
+updateXPUI();
+renderAchievements();
 
 </script>
 </body>
