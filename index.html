@@ -2,181 +2,762 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>GK Quiz Rush Premium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>GK Quiz Rush Premium Fixed</title>
 <style>
-:root{--gold:#ffd54a;--orange:#ff9800;--cyan:#00e5ff;--deep:#050b1a;--panel:rgba(8,22,48,.82)}
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;-webkit-tap-highlight-color:transparent}
-body{min-height:100vh;background:radial-gradient(circle at 20% 10%,rgba(0,229,255,.18),transparent 26%),radial-gradient(circle at 80% 5%,rgba(255,213,74,.18),transparent 25%),linear-gradient(160deg,#020714,#071633 58%,#020714);color:white;display:flex;justify-content:center;align-items:flex-start;padding:14px;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.06) 1px,transparent 1px);background-size:36px 36px;opacity:.45;pointer-events:none;animation:gridMove 15s linear infinite}@keyframes gridMove{to{background-position:72px 72px}}
-#game{width:100%;max-width:480px;text-align:center;position:relative;z-index:2}.logo{margin:8px auto 12px}.gk{font-size:50px;font-weight:900;color:var(--gold);text-shadow:0 0 12px var(--gold),0 4px 0 #8b5200;line-height:.9}.rush{font-size:28px;font-weight:900;text-shadow:0 0 12px var(--cyan)}.tag{font-size:13px;color:var(--cyan);margin-top:8px;letter-spacing:2px}
-.card{background:var(--panel);border:1px solid rgba(0,229,255,.28);border-radius:26px;padding:18px;margin-top:14px;box-shadow:0 0 24px rgba(0,229,255,.16),inset 0 0 20px rgba(255,255,255,.03);backdrop-filter:blur(10px);animation:screenIn .35s ease;position:relative;overflow:hidden}.card:before{content:"";position:absolute;top:0;left:-120%;width:90%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:shine 5s infinite}@keyframes shine{0%{left:-120%}45%{left:120%}100%{left:120%}}@keyframes screenIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
-.hero{width:118px;height:118px;margin:4px auto 12px;border-radius:30px;background:radial-gradient(circle at 50% 25%,#fff4a3,#ffb300 35%,#091a3b 36%);border:3px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:58px;box-shadow:0 0 28px var(--gold);animation:float 2.6s ease-in-out infinite}@keyframes float{50%{transform:translateY(-8px)}}
-h2{color:var(--gold);font-size:25px;margin-bottom:8px}.small{font-size:14px;color:#cfe8ff;line-height:1.5;margin-top:8px}input,select{width:100%;margin-top:10px;padding:14px;border-radius:16px;border:1px solid rgba(0,229,255,.32);background:#07152d;color:white;font-size:16px;font-weight:bold}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-button{width:100%;border:none;margin-top:10px;padding:15px;border-radius:18px;font-size:16px;font-weight:900;cursor:pointer;transition:.12s}button:active{transform:scale(.97)}.btnGold{background:linear-gradient(135deg,var(--gold),var(--orange));color:#111;box-shadow:0 0 18px rgba(255,213,74,.38)}.btnBlue{background:linear-gradient(135deg,#063e96,#071a38);color:white;border:1px solid rgba(0,229,255,.35)}
-#quizScreen,#resultScreen,#leaderboardScreen,#achievementScreen{display:none}#scoreBar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.stat{background:rgba(0,0,0,.28);border-radius:17px;padding:10px 4px}.stat b{display:block;font-size:13px;color:#cfe8ff}.stat span{display:block;margin-top:4px;font-size:22px;color:var(--cyan);font-weight:900;text-shadow:0 0 10px var(--cyan)}
-#questionBox{min-height:320px}#questionNumber{color:#b8dfff;font-size:14px}#playerTurn{color:var(--gold);font-weight:bold;margin-bottom:6px}#timerWrap{height:12px;background:#061021;border-radius:30px;margin:14px 0;overflow:hidden}#timerBar{height:100%;width:100%;background:linear-gradient(90deg,var(--cyan),var(--gold),#ff4d4d);transition:width .2s linear}#question{font-size:22px;font-weight:900;line-height:1.35;margin:16px 0;text-shadow:0 0 10px rgba(0,229,255,.25);animation:questionPop .25s ease}@keyframes questionPop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-.answerBtn{display:block;background:linear-gradient(135deg,#0b2755,#07152e);color:white;border:1px solid rgba(0,229,255,.22);box-shadow:0 5px 14px rgba(0,0,0,.28);text-align:left;padding-left:18px;animation:slideUp .25s ease}@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.correct{background:linear-gradient(135deg,#00c853,#007d38)!important}.wrong{background:linear-gradient(135deg,#ff5252,#8b1111)!important}#feedback{min-height:30px;font-size:20px;font-weight:900;margin-top:10px}.good{color:var(--cyan)}.bad{color:#ff7474}
-.xpWrap{margin-top:12px;background:#061021;height:14px;border-radius:20px;overflow:hidden}#xpBar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--gold));transition:width .45s ease}#levelText{margin-top:8px;color:var(--gold);font-weight:900}.badge{margin-top:12px;background:rgba(255,213,74,.12);border:1px solid rgba(255,213,74,.35);border-radius:17px;padding:12px;color:var(--gold);font-weight:900}.leaderItem,.achItem{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(0,0,0,.28);border:1px solid rgba(0,229,255,.14);border-radius:16px;padding:12px;margin-top:9px}.achItem.unlocked{color:var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.18)}
-.toast{position:fixed;top:17%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold),var(--orange));color:#111;padding:14px 22px;border-radius:20px;font-weight:900;font-size:21px;z-index:1000;box-shadow:0 0 28px var(--gold);animation:pop 1.8s forwards}@keyframes pop{0%{opacity:0;transform:translateX(-50%) scale(.55)}20%{opacity:1;transform:translateX(-50%) scale(1.08)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1.45)}}.particle{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:999}
-@media(max-width:480px){.gk{font-size:43px}.rush{font-size:24px}#question{font-size:20px}button{font-size:15px;padding:13px}.grid2{grid-template-columns:1fr}}
-</style></head><body><div id="game">
-<div class="logo"><div class="gk">GK QUIZ</div><div class="rush">RUSH</div><div class="tag">PLAY • LEARN • WIN</div></div>
-<div id="startScreen" class="card"><div class="hero">💡</div><h2>Become a Quiz Legend</h2><p class="small">Premium neon quiz with endless questions, achievements, levels, Hindi + English, local leaderboard and multiplayer.</p><input id="playerName" placeholder="Player name" value="Player 1"><div class="grid2"><select id="languageSelect"><option value="en">English</option><option value="hi">Hindi</option></select><select id="categorySelect">
-<option value="mixed">Mixed GK</option>
-<option value="bollywood">Bollywood</option>
-<option value="geopolitics">World Geo Politics</option>
-<option value="capital">World Capitals</option>
-<option value="currency">Currencies</option>
-<option value="science">Science</option>
-<option value="animal">Animals</option>
-<option value="math">Math</option>
-<option value="sports">Sports</option>
-<option value="history">History</option>
-<option value="technology">Technology</option>
-<option value="planets">Planets & Space</option>
-<option value="leaders">World Leaders</option>
-</select></div><div class="grid2"><button class="btnGold" onclick="startGame('endless')">▶ Endless Play</button><button class="btnGold" onclick="startGame('classic')">⚡ 10 Questions</button></div><div class="grid2"><button class="btnBlue" onclick="startMultiplayer()">👥 2 Player</button><button class="btnBlue" onclick="showLeaderboard()">🏆 Leaderboard</button></div><div class="grid2"><button class="btnBlue" onclick="showAchievements()">🏅 Achievements</button><button class="btnBlue" onclick="toggleMusic()">🎵 Sound</button></div><div id="levelText">Level 1 • XP 0/500</div><div class="xpWrap"><div id="xpBar"></div></div><div class="badge">Daily learning. Endless challenge. Zero paid backend.</div></div>
-<div id="quizScreen"><div id="scoreBar" class="card"><div class="stat"><b id="scoreLabel">Score</b><span id="score">0</span></div><div class="stat"><b id="streakLabel">Streak</b><span id="streak">0</span></div><div class="stat"><b id="livesLabel">Lives</b><span id="lives">3</span></div></div><div id="questionBox" class="card"><div id="playerTurn"></div><div id="questionNumber">Question 1</div><div id="timerWrap"><div id="timerBar"></div></div><div id="question"></div><div id="answers"></div><div id="feedback"></div></div></div>
-<div id="resultScreen" class="card"><div class="hero">🏆</div><h2 id="resultTitle">Quiz Complete!</h2><div id="finalScore" style="font-size:42px;color:var(--cyan);font-weight:900">0</div><div id="highScore" class="small">Best: 0</div><div class="badge" id="rankText">Rank</div><button class="btnGold" onclick="startGame('endless')">Play Again</button><button class="btnBlue" onclick="showLeaderboard()">Leaderboard</button><button class="btnBlue" onclick="showStart()">Main Menu</button></div>
-<div id="leaderboardScreen" class="card"><h2>🏆 Leaderboard</h2><div id="leaderList"></div><button class="btnBlue" onclick="clearLeaderboard()">Clear Leaderboard</button><button class="btnGold" onclick="showStart()">Main Menu</button></div>
-<div id="achievementScreen" class="card"><h2>🏅 Achievements</h2><div id="achievementList"></div><button class="btnGold" onclick="showStart()">Main Menu</button></div>
-</div>
-<script>
-let audioCtx=null,musicEnabled=localStorage.getItem("musicEnabled")!=="false",soundEnabled=localStorage.getItem("soundEnabled")!=="false",musicTimer=null;function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume()}function playTone(f,d,t="sine",v=.06){if(!soundEnabled)return;initAudio();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d)}function playButtonSound(){playTone(520,.08,"square",.04);setTimeout(()=>playTone(740,.08,"sine",.035),60)}function playCorrectSound(){playTone(650,.1);setTimeout(()=>playTone(900,.12),90);setTimeout(()=>playTone(1150,.14),180)}function playWrongSound(){playTone(220,.16,"sawtooth");setTimeout(()=>playTone(150,.18,"sawtooth"),130)}function startBackgroundMusic(){if(!musicEnabled||musicTimer)return;initAudio();let m=[262,330,392,523,392,330,294,392],i=0;musicTimer=setInterval(()=>playTone(m[i++%m.length],.25,"triangle",.025),340)}function stopBackgroundMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}}function toggleMusic(){initAudio();musicEnabled=!musicEnabled;soundEnabled=musicEnabled;localStorage.setItem("musicEnabled",musicEnabled);localStorage.setItem("soundEnabled",soundEnabled);if(musicEnabled){startBackgroundMusic();showToast("🎵 Sound ON")}else{stopBackgroundMusic();showToast("🔇 Sound OFF")}}document.addEventListener("click",e=>{if(e.target.tagName==="BUTTON")playButtonSound()});
-const data={capital:[["India","New Delhi","भारत","नई दिल्ली"],["France","Paris","फ्रांस","पेरिस"],["Japan","Tokyo","जापान","टोक्यो"],["Uganda","Kampala","युगांडा","कंपाला"],["Kenya","Nairobi","केन्या","नैरोबी"],["China","Beijing","चीन","बीजिंग"],["Germany","Berlin","जर्मनी","बर्लिन"],["Italy","Rome","इटली","रोम"],["Australia","Canberra","ऑस्ट्रेलिया","कैनबरा"]],currency:[["India","Rupee","भारत","रुपया"],["Japan","Yen","जापान","येन"],["USA","Dollar","अमेरिका","डॉलर"],["UK","Pound Sterling","यूके","पाउंड स्टर्लिंग"],["China","Yuan","चीन","युआन"],["Uganda","Ugandan Shilling","युगांडा","युगांडन शिलिंग"],["UAE","Dirham","यूएई","दिरहम"]],science:[["chemical symbol for water","H2O","पानी का रासायनिक सूत्र","H2O"],["gas humans breathe in","Oxygen","मनुष्य कौन सी गैस सांस लेते हैं","ऑक्सीजन"],["gas plants absorb","Carbon Dioxide","पौधे कौन सी गैस लेते हैं","कार्बन डाइऑक्साइड"],["force that pulls objects to Earth","Gravity","वस्तुओं को पृथ्वी की ओर खींचने वाला बल","गुरुत्वाकर्षण"],["instrument used to measure temperature","Thermometer","तापमान मापने का यंत्र","थर्मामीटर"]],animal:[["fastest land animal","Cheetah","सबसे तेज जमीन वाला जानवर","चीता"],["largest land animal","Elephant","सबसे बड़ा स्थलीय जानवर","हाथी"],["ship of the desert","Camel","रेगिस्तान का जहाज","ऊंट"],["largest animal on Earth","Blue Whale","पृथ्वी का सबसे बड़ा जानवर","ब्लू व्हेल"],["national animal of India","Tiger","भारत का राष्ट्रीय पशु","बाघ"]],math:[["smallest prime number","2","सबसे छोटी अभाज्य संख्या","2"],["number of degrees in a right angle","90","समकोण में कितने डिग्री होते हैं","90"],["number of sides in a triangle","3","त्रिभुज की भुजाएँ","3"],["square root of 64","8","64 का वर्गमूल","8"],["value of 12 x 12","144","12 x 12 का मान","144"]]};
-const fixed=[{en:"Which planet is known as the Red Planet?",hi:"किस ग्रह को लाल ग्रह कहा जाता है?",a:["Earth","Venus","Mars","Jupiter"],h:["पृथ्वी","शुक्र","मंगल","बृहस्पति"],c:2},{en:"How many continents are there?",hi:"दुनिया में कितने महाद्वीप हैं?",a:["5","6","7","8"],h:["5","6","7","8"],c:2},{en:"Who is known as the Father of Computers?",hi:"कंप्यूटर के जनक किसे कहा जाता है?",a:["Charles Babbage","Einstein","Newton","Bill Gates"],h:["चार्ल्स बैबेज","आइंस्टीन","न्यूटन","बिल गेट्स"],c:0}];
-function pick(a){return a[Math.floor(Math.random()*a.length)]}function shuffle(a){return[...a].sort(()=>Math.random()-.5)}function lang(){return document.getElementById("languageSelect").value}function cat(){return document.getElementById("categorySelect").value}function player(){return document.getElementById("playerName").value||"Player"}
-let mode="endless",score=0,streak=0,lives=3,timeLeft=15,timer=null,locked=false,current=null,questionCount=0,multiplayer=false,playerIndex=0,mpScores=[0,0],mpNames=["Player 1","Player 2"];const screens=["startScreen","quizScreen","resultScreen","leaderboardScreen","achievementScreen"],scoreEl=document.getElementById("score"),streakEl=document.getElementById("streak"),livesEl=document.getElementById("lives"),questionEl=document.getElementById("question"),answersEl=document.getElementById("answers"),feedbackEl=document.getElementById("feedback"),timerBar=document.getElementById("timerBar");
-const ach=[["first","First Challenge","Start your first quiz",50],["score500","Quick Learner","Reach 500 score",100],["score1500","GK Warrior","Reach 1500 score",150],["score3000","Quiz Master","Reach 3000 score",250],["streak3","Hot Streak","Get 3 correct in a row",100],["streak7","Unstoppable","Get 7 correct in a row",200],["endless20","Endless Mind","Answer 20 endless questions",300],["multi","Social Player","Play multiplayer mode",100],["hindi","Hindi Champion","Play in Hindi",100],["category","Specialist","Play a specific category",100]];let unlocked=JSON.parse(localStorage.getItem("quizAchievements")||"[]"),xp=parseInt(localStorage.getItem("playerXP")||"0");
-function updateXP(){let lvl=Math.floor(xp/500)+1,cur=xp%500;document.getElementById("levelText").innerText=`Level ${lvl} • XP ${cur}/500`;document.getElementById("xpBar").style.width=(cur/500*100)+"%"}function unlock(id){if(unlocked.includes(id))return;let a=ach.find(x=>x[0]===id);if(!a)return;unlocked.push(id);localStorage.setItem("quizAchievements",JSON.stringify(unlocked));xp+=a[3];localStorage.setItem("playerXP",xp);showToast("🏅 "+a[1]+" +"+a[3]+" XP");updateXP();renderAchievements()}function renderAchievements(){document.getElementById("achievementList").innerHTML=ach.map(a=>`<div class="achItem ${unlocked.includes(a[0])?"unlocked":""}"><div>${unlocked.includes(a[0])?"✅":"🔒"} <b>${a[1]}</b><br><small>${a[2]}</small></div><b>+${a[3]} XP</b></div>`).join("")}
-function makeGenerated(){let selected=cat();if(selected==="mixed")selected=pick(Object.keys(data));let item=pick(data[selected]),L=lang(),q,correct,pool;if(selected==="capital"){q=L==="hi"?`${item[2]} की राजधानी क्या है?`:`What is the capital of ${item[0]}?`;correct=L==="hi"?item[3]:item[1];pool=data[selected].map(x=>L==="hi"?x[3]:x[1])}else if(selected==="currency"){q=L==="hi"?`${item[2]} की मुद्रा क्या है?`:`What is the currency of ${item[0]}?`;correct=L==="hi"?item[3]:item[1];pool=data[selected].map(x=>L==="hi"?x[3]:x[1])}else{q=L==="hi"?`${item[2]} क्या है?`:`What is the ${item[0]}?`;correct=L==="hi"?item[3]:item[1];pool=data[selected].map(x=>L==="hi"?x[3]:x[1])}let opts=shuffle([correct,...shuffle(pool.filter(x=>x!==correct)).slice(0,3)]);return{q:q,a:opts,c:opts.indexOf(correct)}}function getQuestion(){
-    if(Math.random()<0.75){
-        return generateMegaQuestion();
-    }
-    if(Math.random()<.2&&cat()==="mixed"){
-        let f=pick(fixed),L=lang();
-        return{q:L==="hi"?f.hi:f.en,a:L==="hi"?f.h:f.a,c:f.c}
-    }
-    return makeGenerated()
+:root{
+    --gold:#ffd54a;
+    --orange:#ff9800;
+    --cyan:#00e5ff;
+    --blue:#08215a;
+    --dark:#020714;
+    --panel:rgba(8,22,48,.82);
 }
-function show(id){screens.forEach(s=>document.getElementById(s).style.display="none");document.getElementById(id).style.display="block"}function showStart(){show("startScreen");updateXP()}function startGame(m){initAudio();startBackgroundMusic();unlock("first");if(lang()==="hi")unlock("hindi");if(cat()!=="mixed")unlock("category");multiplayer=false;mode=m;score=0;streak=0;lives=3;questionCount=0;show("quizScreen");updateLabels();updateStats();showQuestion()}function startMultiplayer(){initAudio();startBackgroundMusic();unlock("multi");multiplayer=true;mode="classic";mpScores=[0,0];mpNames=[player(),"Player 2"];playerIndex=0;score=0;streak=0;lives=3;questionCount=0;show("quizScreen");updateLabels();updateStats();showQuestion()}function updateLabels(){let L=lang();document.getElementById("scoreLabel").innerText=L==="hi"?"स्कोर":"Score";document.getElementById("streakLabel").innerText=L==="hi"?"स्ट्रीक":"Streak";document.getElementById("livesLabel").innerText=L==="hi"?"लाइफ":"Lives"}
-function showQuestion(){clearInterval(timer);locked=false;timeLeft=15;timerBar.style.width="100%";feedbackEl.innerText="";feedbackEl.className="";current=getQuestion();questionCount++;document.getElementById("questionNumber").innerText=(lang()==="hi"?"प्रश्न ":"Question ")+questionCount+(mode==="classic"?"/10":" • Endless");document.getElementById("playerTurn").innerText=multiplayer?`Turn: ${mpNames[playerIndex]} | P1 ${mpScores[0]} - P2 ${mpScores[1]}`:"";questionEl.innerText=current.q;answersEl.innerHTML="";current.a.forEach((ans,i)=>{let b=document.createElement("button");b.className="answerBtn";b.innerText=String.fromCharCode(65+i)+". "+ans;b.onclick=()=>choose(i,b);answersEl.appendChild(b)});timer=setInterval(()=>{timeLeft-=.2;timerBar.style.width=Math.max(0,(timeLeft/15)*100)+"%";if(timeLeft<=0){clearInterval(timer);timeout()}},200)}
-function choose(i,btn){if(locked)return;locked=true;clearInterval(timer);let all=document.querySelectorAll(".answerBtn");if(i===current.c){playCorrectSound();streak++;let pts=100+(streak>=3?50:0)+Math.round(timeLeft*5);score+=pts;if(multiplayer)mpScores[playerIndex]+=pts;btn.classList.add("correct");feedbackEl.innerText=(lang()==="hi"?"सही! +":"Correct! +")+pts;feedbackEl.className="good";if(streak===3)unlock("streak3");if(streak===7)unlock("streak7");particles();if(navigator.vibrate)navigator.vibrate(40)}else{playWrongSound();lives--;streak=0;btn.classList.add("wrong");all[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"गलत!":"Wrong!";feedbackEl.className="bad";if(navigator.vibrate)navigator.vibrate([60,40,60])}updateStats();setTimeout(next,1100)}
-function timeout(){if(locked)return;locked=true;playWrongSound();lives--;streak=0;document.querySelectorAll(".answerBtn")[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"समय समाप्त!":"Time up!";feedbackEl.className="bad";updateStats();setTimeout(next,1100)}function next(){if(multiplayer)playerIndex=playerIndex===0?1:0;if(lives<=0){endGame();return}if(mode==="classic"&&questionCount>=10){endGame();return}showQuestion()}function updateStats(){scoreEl.innerText=score;streakEl.innerText=streak;livesEl.innerText=lives;if(score>=500)unlock("score500");if(score>=1500)unlock("score1500");if(score>=3000)unlock("score3000");if(mode==="endless"&&questionCount>=20)unlock("endless20")}
-function endGame(){clearInterval(timer);show("resultScreen");let final=multiplayer?Math.max(mpScores[0],mpScores[1]):score,winner=multiplayer?(mpScores[0]>mpScores[1]?mpNames[0]:mpScores[1]>mpScores[0]?mpNames[1]:"Tie"):"";document.getElementById("resultTitle").innerText=multiplayer?("Winner: "+winner):(lang()==="hi"?"क्विज़ समाप्त!":"Quiz Complete!");document.getElementById("finalScore").innerText=multiplayer?`P1 ${mpScores[0]} - P2 ${mpScores[1]}`:score;saveLeaderboard(player(),final);let best=Math.max(...getLeaderboard().map(x=>x.score),0);document.getElementById("highScore").innerText="Best: "+best;document.getElementById("rankText").innerText=final>=3000?"Quiz Legend":final>=1500?"GK Master":final>=700?"Smart Player":"Beginner"}function getLeaderboard(){return JSON.parse(localStorage.getItem("leaderboard")||"[]")}function saveLeaderboard(name,score){let list=getLeaderboard();list.push({name,score,date:new Date().toLocaleDateString()});list.sort((a,b)=>b.score-a.score);localStorage.setItem("leaderboard",JSON.stringify(list.slice(0,10)))}function showLeaderboard(){show("leaderboardScreen");let list=getLeaderboard();document.getElementById("leaderList").innerHTML=list.length?list.map((x,i)=>`<div class="leaderItem"><span>${i+1}. ${x.name}</span><b>${x.score}</b></div>`).join(""):"No scores yet."}function clearLeaderboard(){localStorage.removeItem("leaderboard");showLeaderboard()}function showAchievements(){show("achievementScreen");renderAchievements()}function showToast(t){let el=document.createElement("div");el.className="toast";el.innerText=t;document.body.appendChild(el);setTimeout(()=>el.remove(),1800)}function particles(){for(let i=0;i<14;i++){let p=document.createElement("div");p.className="particle";p.style.left=(innerWidth/2)+"px";p.style.top="145px";document.body.appendChild(p);let x=(Math.random()-.5)*260,y=(Math.random()-.5)*220;p.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${x}px,${y}px)`,opacity:0}],{duration:800});setTimeout(()=>p.remove(),800)}}document.addEventListener("visibilitychange",()=>{if(document.hidden)stopBackgroundMusic();else if(musicEnabled)startBackgroundMusic()});updateXP();renderAchievements();
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 20% 8%,rgba(0,229,255,.20),transparent 28%),
+        radial-gradient(circle at 85% 5%,rgba(255,213,74,.18),transparent 26%),
+        linear-gradient(160deg,#020714,#071633 58%,#020714);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:14px;
+    overflow-x:hidden;
+}
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(0,229,255,.055) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,229,255,.055) 1px,transparent 1px);
+    background-size:36px 36px;
+    opacity:.55;
+    pointer-events:none;
+    animation:gridMove 16s linear infinite;
+}
+@keyframes gridMove{to{background-position:72px 72px}}
+#game{width:100%;max-width:500px;text-align:center;position:relative;z-index:2}
+.logo{margin:8px auto 12px}
+.logo .main{
+    font-size:46px;
+    font-weight:900;
+    color:var(--gold);
+    text-shadow:0 0 15px var(--gold),0 4px 0 #8b5200;
+    line-height:.95;
+}
+.logo .sub{
+    font-size:28px;
+    font-weight:900;
+    text-shadow:0 0 14px var(--cyan);
+}
+.logo .tag{font-size:13px;color:var(--cyan);margin-top:7px;letter-spacing:2px}
+.card{
+    background:var(--panel);
+    border:1px solid rgba(0,229,255,.28);
+    border-radius:26px;
+    padding:18px;
+    margin-top:14px;
+    box-shadow:0 0 26px rgba(0,229,255,.17), inset 0 0 20px rgba(255,255,255,.03);
+    backdrop-filter:blur(10px);
+    animation:screenIn .35s ease;
+    position:relative;
+    overflow:hidden;
+}
+.card::before{
+    content:"";
+    position:absolute;
+    top:0;left:-120%;
+    width:90%;height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+    animation:shine 5s infinite;
+}
+@keyframes shine{0%{left:-120%}45%{left:120%}100%{left:120%}}
+@keyframes screenIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.hero{
+    width:116px;height:116px;
+    margin:4px auto 12px;
+    border-radius:30px;
+    background:radial-gradient(circle at 50% 25%,#fff6a6,#ffb300 35%,#091a3b 36%);
+    border:3px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-size:56px;
+    box-shadow:0 0 28px var(--gold), inset 0 0 22px rgba(0,0,0,.35);
+    animation:float 2.6s ease-in-out infinite;
+}
+@keyframes float{50%{transform:translateY(-8px)}}
+h2{color:var(--gold);font-size:25px;margin-bottom:8px}
+.small{font-size:14px;color:#cfe8ff;line-height:1.5;margin-top:8px}
+input,select{
+    width:100%;
+    margin-top:10px;
+    padding:14px;
+    border-radius:16px;
+    border:1px solid rgba(0,229,255,.32);
+    background:#07152d;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{
+    width:100%;
+    border:none;
+    margin-top:10px;
+    padding:15px;
+    border-radius:18px;
+    font-size:16px;
+    font-weight:900;
+    cursor:pointer;
+    transition:.12s;
+}
+button:active{transform:scale(.97)}
+.btnGold{
+    background:linear-gradient(135deg,var(--gold),var(--orange));
+    color:#111;
+    box-shadow:0 0 18px rgba(255,213,74,.38);
+}
+.btnBlue{
+    background:linear-gradient(135deg,#063e96,#071a38);
+    color:white;
+    border:1px solid rgba(0,229,255,.35);
+    box-shadow:0 0 14px rgba(0,229,255,.2);
+}
+#quiz,#result,#leaderboard,#achievements{display:none}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.stat{
+    background:rgba(0,0,0,.28);
+    border-radius:17px;
+    padding:10px 4px;
+    border:1px solid rgba(255,255,255,.08);
+}
+.stat b{display:block;font-size:13px;color:#cfe8ff}
+.stat span{display:block;margin-top:4px;font-size:22px;color:var(--cyan);font-weight:900;text-shadow:0 0 10px var(--cyan)}
+#qnum{color:#b8dfff;font-size:14px}
+#timerWrap{height:12px;background:#061021;border-radius:30px;margin:14px 0;overflow:hidden;border:1px solid rgba(255,255,255,.08)}
+#timerBar{height:100%;width:100%;background:linear-gradient(90deg,var(--cyan),var(--gold),#ff4d4d);transition:width .2s linear}
+#question{
+    font-size:22px;
+    font-weight:900;
+    line-height:1.35;
+    margin:18px 0;
+    color:white;
+    text-shadow:0 0 10px rgba(0,229,255,.25);
+    animation:questionPop .25s ease;
+}
+@keyframes questionPop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.answer{
+    display:block;
+    background:linear-gradient(135deg,#0b2755,#07152e);
+    color:white;
+    border:1px solid rgba(0,229,255,.22);
+    box-shadow:0 5px 14px rgba(0,0,0,.28);
+    text-align:left;
+    padding-left:18px;
+    animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.correct{background:linear-gradient(135deg,#00c853,#007d38)!important}
+.wrong{background:linear-gradient(135deg,#ff5252,#8b1111)!important}
+#feedback{min-height:30px;font-size:20px;font-weight:900;margin-top:10px}
+.good{color:var(--cyan)}.bad{color:#ff7474}
+.xpWrap{margin-top:12px;background:#061021;height:14px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+#xpBar{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),var(--gold));transition:width .45s ease}
+#levelText{margin-top:8px;color:var(--gold);font-weight:900}
+.badge{
+    margin-top:12px;
+    background:rgba(255,213,74,.12);
+    border:1px solid rgba(255,213,74,.35);
+    border-radius:17px;
+    padding:12px;
+    color:var(--gold);
+    font-weight:900;
+}
+.item,.achItem{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;
+    background:rgba(0,0,0,.28);
+    border:1px solid rgba(0,229,255,.14);
+    border-radius:16px;
+    padding:12px;
+    margin-top:9px;
+}
+.achItem.unlocked{color:var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.18)}
+.toast{
+    position:fixed;top:17%;left:50%;transform:translateX(-50%);
+    background:linear-gradient(135deg,var(--gold),var(--orange));
+    color:#111;padding:14px 22px;border-radius:20px;
+    font-weight:900;font-size:21px;z-index:1000;
+    box-shadow:0 0 28px var(--gold);
+    animation:pop 1.8s forwards;
+}
+@keyframes pop{0%{opacity:0;transform:translateX(-50%) scale(.55)}20%{opacity:1;transform:translateX(-50%) scale(1.08)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1.45)}}
+.particle{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:999}
+@media(max-width:480px){
+    .logo .main{font-size:39px}.logo .sub{font-size:24px}
+    #question{font-size:20px}
+    button{font-size:15px;padding:13px}
+    .grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="game">
+    <div class="logo">
+        <div class="main">GK QUIZ</div>
+        <div class="sub">RUSH</div>
+        <div class="tag">PLAY • LEARN • WIN</div>
+    </div>
 
+    <div id="menu" class="card">
+        <div class="hero">💡</div>
+        <h2>Premium Quiz Game</h2>
+        <p class="small">Working category engine with premium neon UI, sound effects, background music, Hindi + English, leaderboard and achievements.</p>
 
-// ===== PLAY STORE SAFE ROBUST QUESTION ENGINE =====
-const categoryBanks = {
-    bollywood: [
-        {q:"Which of these is a famous Bollywood actor?", a:["Shah Rukh Khan","Lionel Messi","Elon Musk","Virat Kohli"], c:0, hq:"इनमें से कौन प्रसिद्ध बॉलीवुड अभिनेता हैं?", ha:["शाहरुख खान","लियोनेल मेसी","एलन मस्क","विराट कोहली"]},
-        {q:"Which of these is a Bollywood movie?", a:["Sholay","Titanic","Avatar","Inception"], c:0, hq:"इनमें से कौन सी बॉलीवुड फिल्म है?", ha:["शोले","टाइटैनिक","अवतार","इंसेप्शन"]},
-        {q:"Who is popularly called Big B in Bollywood?", a:["Amitabh Bachchan","Salman Khan","Aamir Khan","Ranbir Kapoor"], c:0, hq:"बॉलीवुड में बिग बी किसे कहा जाता है?", ha:["अमिताभ बच्चन","सलमान खान","आमिर खान","रणबीर कपूर"]},
-        {q:"Which Bollywood film is known for the dialogue 'Kitne aadmi the'?", a:["Sholay","Dangal","War","PK"], c:0, hq:"'कितने आदमी थे' संवाद किस फिल्म से जुड़ा है?", ha:["शोले","दंगल","वॉर","पीके"]},
-        {q:"Which actor is known as Mr. Perfectionist in Bollywood?", a:["Aamir Khan","Akshay Kumar","Ajay Devgn","Hrithik Roshan"], c:0, hq:"बॉलीवुड में मिस्टर परफेक्शनिस्ट किसे कहा जाता है?", ha:["आमिर खान","अक्षय कुमार","अजय देवगन","ऋतिक रोशन"]}
-    ],
-    geopolitics: [
-        {q:"What is the United Nations mainly created for?", a:["International peace and cooperation","Cricket tournaments","Movie awards","Space tourism"], c:0, hq:"संयुक्त राष्ट्र मुख्य रूप से किस लिए बनाया गया था?", ha:["अंतरराष्ट्रीय शांति और सहयोग","क्रिकेट टूर्नामेंट","फिल्म पुरस्कार","अंतरिक्ष पर्यटन"]},
-        {q:"Which organization is a military alliance?", a:["NATO","FIFA","OPEC","UNESCO"], c:0, hq:"इनमें से कौन सा सैन्य गठबंधन है?", ha:["नाटो","फीफा","ओपेक","यूनेस्को"]},
-        {q:"BRICS originally refers to a group of what?", a:["Emerging economies","European football clubs","Space agencies","Oil companies"], c:0, hq:"BRICS मूल रूप से किस समूह को दर्शाता है?", ha:["उभरती अर्थव्यवस्थाएँ","यूरोपीय फुटबॉल क्लब","अंतरिक्ष एजेंसियाँ","तेल कंपनियाँ"]},
-        {q:"Which body has permanent members with veto power?", a:["UN Security Council","FIFA Council","Olympic Committee","World Bank Board"], c:0, hq:"किस संस्था में वीटो शक्ति वाले स्थायी सदस्य होते हैं?", ha:["संयुक्त राष्ट्र सुरक्षा परिषद","फीफा परिषद","ओलंपिक समिति","विश्व बैंक बोर्ड"]},
-        {q:"What does G20 mainly represent?", a:["Major global economies","Twenty movie studios","Twenty planets","A cricket league"], c:0, hq:"G20 मुख्य रूप से क्या दर्शाता है?", ha:["प्रमुख वैश्विक अर्थव्यवस्थाएँ","बीस फिल्म स्टूडियो","बीस ग्रह","क्रिकेट लीग"]},
-        {q:"OPEC is mainly related to which resource?", a:["Oil","Gold","Water","Wheat"], c:0, hq:"OPEC मुख्य रूप से किस संसाधन से संबंधित है?", ha:["तेल","सोना","पानी","गेहूं"]},
-        {q:"The European Union is primarily a union of countries from which region?", a:["Europe","South America","Africa","Antarctica"], c:0, hq:"यूरोपीय संघ मुख्य रूप से किस क्षेत्र के देशों का संघ है?", ha:["यूरोप","दक्षिण अमेरिका","अफ्रीका","अंटार्कटिका"]},
-        {q:"Which institution is known for international monetary cooperation?", a:["IMF","ICC","NASA","Netflix"], c:0, hq:"कौन सी संस्था अंतरराष्ट्रीय मौद्रिक सहयोग के लिए जानी जाती है?", ha:["आईएमएफ","आईसीसी","नासा","नेटफ्लिक्स"]},
-        {q:"ASEAN is mainly associated with which region?", a:["Southeast Asia","North America","Arctic region","Western Europe"], c:0, hq:"ASEAN मुख्य रूप से किस क्षेत्र से संबंधित है?", ha:["दक्षिण-पूर्व एशिया","उत्तरी अमेरिका","आर्कटिक क्षेत्र","पश्चिमी यूरोप"]},
-        {q:"What is diplomacy?", a:["Managing relations between countries","A type of dance","A computer virus","A sports trophy"], c:0, hq:"कूटनीति क्या है?", ha:["देशों के बीच संबंधों का प्रबंधन","एक प्रकार का नृत्य","कंप्यूटर वायरस","खेल ट्रॉफी"]}
-    ],
-    capital: [
-        {q:"What is the capital of India?", a:["New Delhi","Mumbai","Kolkata","Chennai"], c:0, hq:"भारत की राजधानी क्या है?", ha:["नई दिल्ली","मुंबई","कोलकाता","चेन्नई"]},
-        {q:"What is the capital of Uganda?", a:["Kampala","Nairobi","Accra","Cairo"], c:0, hq:"युगांडा की राजधानी क्या है?", ha:["कंपाला","नैरोबी","अकरा","काहिरा"]},
-        {q:"What is the capital of Japan?", a:["Tokyo","Kyoto","Osaka","Seoul"], c:0, hq:"जापान की राजधानी क्या है?", ha:["टोक्यो","क्योटो","ओसाका","सियोल"]},
-        {q:"What is the capital of France?", a:["Paris","Rome","Berlin","Madrid"], c:0, hq:"फ्रांस की राजधानी क्या है?", ha:["पेरिस","रोम","बर्लिन","मैड्रिड"]}
-    ],
-    currency: [
-        {q:"What is the currency of India?", a:["Rupee","Yen","Euro","Dollar"], c:0, hq:"भारत की मुद्रा क्या है?", ha:["रुपया","येन","यूरो","डॉलर"]},
-        {q:"What is the currency of Japan?", a:["Yen","Rupee","Pound","Dirham"], c:0, hq:"जापान की मुद्रा क्या है?", ha:["येन","रुपया","पाउंड","दिरहम"]},
-        {q:"What is the currency of Uganda?", a:["Ugandan Shilling","Euro","Yuan","Dollar"], c:0, hq:"युगांडा की मुद्रा क्या है?", ha:["युगांडन शिलिंग","यूरो","युआन","डॉलर"]}
-    ],
-    science: [
-        {q:"What gas do humans breathe in to survive?", a:["Oxygen","Carbon Dioxide","Helium","Nitrogen"], c:0, hq:"मनुष्य जीवित रहने के लिए कौन सी गैस सांस लेते हैं?", ha:["ऑक्सीजन","कार्बन डाइऑक्साइड","हीलियम","नाइट्रोजन"]},
-        {q:"What is H2O commonly known as?", a:["Water","Salt","Oxygen","Gold"], c:0, hq:"H2O को सामान्यतः क्या कहा जाता है?", ha:["पानी","नमक","ऑक्सीजन","सोना"]},
-        {q:"Which force pulls objects toward Earth?", a:["Gravity","Magnetism","Friction","Sound"], c:0, hq:"कौन सा बल वस्तुओं को पृथ्वी की ओर खींचता है?", ha:["गुरुत्वाकर्षण","चुंबकत्व","घर्षण","ध्वनि"]}
-    ],
-    animal: [
-        {q:"Which is the fastest land animal?", a:["Cheetah","Lion","Horse","Tiger"], c:0, hq:"सबसे तेज जमीन वाला जानवर कौन सा है?", ha:["चीता","शेर","घोड़ा","बाघ"]},
-        {q:"Which is the largest land animal?", a:["Elephant","Giraffe","Rhino","Hippo"], c:0, hq:"सबसे बड़ा स्थलीय जानवर कौन सा है?", ha:["हाथी","जिराफ","गैंडा","दरियाई घोड़ा"]},
-        {q:"Which animal is called the ship of the desert?", a:["Camel","Horse","Yak","Goat"], c:0, hq:"किस जानवर को रेगिस्तान का जहाज कहा जाता है?", ha:["ऊंट","घोड़ा","याक","बकरी"]}
-    ],
-    math: [
-        {q:"What is the smallest prime number?", a:["2","1","3","0"], c:0, hq:"सबसे छोटी अभाज्य संख्या क्या है?", ha:["2","1","3","0"]},
-        {q:"What is 12 × 12?", a:["144","124","122","154"], c:0, hq:"12 × 12 कितना होता है?", ha:["144","124","122","154"]},
-        {q:"How many sides does a triangle have?", a:["3","4","5","6"], c:0, hq:"त्रिभुज की कितनी भुजाएँ होती हैं?", ha:["3","4","5","6"]}
-    ],
-    sports: [
-        {q:"How many players are there in a cricket team on the field?", a:["11","9","10","12"], c:0, hq:"क्रिकेट टीम में मैदान पर कितने खिलाड़ी होते हैं?", ha:["11","9","10","12"]},
-        {q:"Which sport is FIFA associated with?", a:["Football","Cricket","Tennis","Hockey"], c:0, hq:"FIFA किस खेल से जुड़ा है?", ha:["फुटबॉल","क्रिकेट","टेनिस","हॉकी"]},
-        {q:"Which sport uses a racket and shuttlecock?", a:["Badminton","Cricket","Football","Kabaddi"], c:0, hq:"किस खेल में रैकेट और शटलकॉक का उपयोग होता है?", ha:["बैडमिंटन","क्रिकेट","फुटबॉल","कबड्डी"]}
-    ],
-    history: [
-        {q:"In which year did India become independent?", a:["1947","1950","1930","1962"], c:0, hq:"भारत किस वर्ष स्वतंत्र हुआ?", ha:["1947","1950","1930","1962"]},
-        {q:"Which war ended in 1945?", a:["World War II","World War I","Cold War","Vietnam War"], c:0, hq:"कौन सा युद्ध 1945 में समाप्त हुआ?", ha:["द्वितीय विश्व युद्ध","प्रथम विश्व युद्ध","शीत युद्ध","वियतनाम युद्ध"]},
-        {q:"Who was the first Prime Minister of India?", a:["Jawaharlal Nehru","Mahatma Gandhi","Sardar Patel","Rajendra Prasad"], c:0, hq:"भारत के पहले प्रधानमंत्री कौन थे?", ha:["जवाहरलाल नेहरू","महात्मा गांधी","सरदार पटेल","राजेंद्र प्रसाद"]}
-    ],
-    technology: [
-        {q:"Which company created Android?", a:["Google","Apple","Microsoft","Tesla"], c:0, hq:"Android किस कंपनी ने बनाया?", ha:["गूगल","एप्पल","माइक्रोसॉफ्ट","टेस्ला"]},
-        {q:"Which company makes the iPhone?", a:["Apple","Samsung","Google","Nokia"], c:0, hq:"iPhone कौन सी कंपनी बनाती है?", ha:["एप्पल","सैमसंग","गूगल","नोकिया"]},
-        {q:"What does AI stand for?", a:["Artificial Intelligence","Auto Internet","Advanced India","Applied Input"], c:0, hq:"AI का पूरा नाम क्या है?", ha:["आर्टिफिशियल इंटेलिजेंस","ऑटो इंटरनेट","एडवांस्ड इंडिया","एप्लाइड इनपुट"]}
-    ],
-    planets: [
-        {q:"Which planet is known as the Red Planet?", a:["Mars","Earth","Venus","Jupiter"], c:0, hq:"किस ग्रह को लाल ग्रह कहा जाता है?", ha:["मंगल","पृथ्वी","शुक्र","बृहस्पति"]},
-        {q:"Which is the largest planet in our solar system?", a:["Jupiter","Mars","Mercury","Earth"], c:0, hq:"हमारे सौरमंडल का सबसे बड़ा ग्रह कौन सा है?", ha:["बृहस्पति","मंगल","बुध","पृथ्वी"]},
-        {q:"Which planet is closest to the Sun?", a:["Mercury","Venus","Earth","Mars"], c:0, hq:"सूर्य के सबसे निकट कौन सा ग्रह है?", ha:["बुध","शुक्र","पृथ्वी","मंगल"]}
-    ],
-    leaders: [
-        {q:"Who is associated with India's independence movement?", a:["Mahatma Gandhi","Napoleon","Einstein","Shakespeare"], c:0, hq:"भारत के स्वतंत्रता आंदोलन से कौन जुड़े हैं?", ha:["महात्मा गांधी","नेपोलियन","आइंस्टीन","शेक्सपीयर"]},
-        {q:"Which leader was known as the Iron Man of India?", a:["Sardar Patel","Jawaharlal Nehru","Subhas Chandra Bose","B. R. Ambedkar"], c:0, hq:"भारत के लौह पुरुष किसे कहा जाता है?", ha:["सरदार पटेल","जवाहरलाल नेहरू","सुभाष चंद्र बोस","बी. आर. आंबेडकर"]},
-        {q:"Who was the first President of India?", a:["Dr. Rajendra Prasad","Dr. A. P. J. Abdul Kalam","Sardar Patel","Lal Bahadur Shastri"], c:0, hq:"भारत के पहले राष्ट्रपति कौन थे?", ha:["डॉ. राजेंद्र प्रसाद","डॉ. ए. पी. जे. अब्दुल कलाम","सरदार पटेल","लाल बहादुर शास्त्री"]}
-    ]
+        <input id="playerName" value="Player 1" placeholder="Player Name">
+
+        <div class="grid2">
+            <select id="language">
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="gu">Gujarati</option>
+                <option value="mr">Marathi</option>
+                <option value="bn">Bengali</option>
+            </select>
+            <select id="category">
+                <option value="mixed">Mixed GK</option>
+                <option value="bollywood">Bollywood</option>
+                <option value="geopolitics">World Geo Politics</option>
+                <option value="capital">World Capitals</option>
+                <option value="currency">Currencies</option>
+                <option value="science">Science</option>
+                <option value="animal">Animals</option>
+                <option value="math">Math</option>
+                <option value="sports">Sports</option>
+                <option value="history">History</option>
+                <option value="technology">Technology</option>
+                <option value="planets">Planets & Space</option>
+                <option value="leaders">World Leaders</option>
+            </select>
+        </div>
+
+        <div class="grid2">
+            <button class="btnGold" onclick="startGame('endless')">▶ Endless Play</button>
+            <button class="btnGold" onclick="startGame('classic')">⚡ 10 Questions</button>
+        </div>
+
+        <div class="grid2">
+            <button class="btnBlue" onclick="showLeaderboard()">🏆 Leaderboard</button>
+            <button class="btnBlue" onclick="showAchievements()">🏅 Achievements</button>
+        </div>
+
+        <button class="btnBlue" onclick="toggleMusic()">🎵 Music / Sound On-Off</button>
+
+        <div id="levelText">Level 1 • XP 0/500</div>
+        <div class="xpWrap"><div id="xpBar"></div></div>
+        <div class="badge">Play Store ready • No paid backend • Offline capable</div>
+    </div>
+
+    <div id="quiz">
+        <div class="card stats">
+            <div class="stat"><b>Score</b><span id="score">0</span></div>
+            <div class="stat"><b>Streak</b><span id="streak">0</span></div>
+            <div class="stat"><b>Lives</b><span id="lives">3</span></div>
+        </div>
+
+        <div class="card">
+            <div id="qnum">Question 1</div>
+            <div id="timerWrap"><div id="timerBar"></div></div>
+            <div id="question">Question text</div>
+            <div id="answers"></div>
+            <div id="feedback"></div>
+        </div>
+    </div>
+
+    <div id="result" class="card">
+        <div class="hero">🏆</div>
+        <h2>Quiz Complete</h2>
+        <div style="font-size:42px;color:var(--cyan);font-weight:900" id="finalScore">0</div>
+        <div id="rank" class="badge">Rank</div>
+        <button class="btnGold" onclick="startGame('endless')">Play Again</button>
+        <button class="btnBlue" onclick="showMenu()">Main Menu</button>
+    </div>
+
+    <div id="leaderboard" class="card">
+        <h2>🏆 Leaderboard</h2>
+        <div id="leaderList"></div>
+        <button class="btnBlue" onclick="clearLeaderboard()">Clear</button>
+        <button class="btnGold" onclick="showMenu()">Main Menu</button>
+    </div>
+
+    <div id="achievements" class="card">
+        <h2>🏅 Achievements</h2>
+        <div id="achievementList"></div>
+        <button class="btnGold" onclick="showMenu()">Main Menu</button>
+    </div>
+</div>
+
+<script>
+let audioCtx=null;
+let musicEnabled=localStorage.getItem("musicEnabled")!=="false";
+let soundEnabled=localStorage.getItem("soundEnabled")!=="false";
+let musicTimer=null;
+
+function initAudio(){
+    if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==="suspended") audioCtx.resume();
+}
+function playTone(freq,duration,type="sine",volume=.055){
+    if(!soundEnabled) return;
+    initAudio();
+    const osc=audioCtx.createOscillator();
+    const gain=audioCtx.createGain();
+    osc.type=type;
+    osc.frequency.value=freq;
+    gain.gain.setValueAtTime(volume,audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime+duration);
+}
+function playButtonSound(){playTone(520,.08,"square",.04);setTimeout(()=>playTone(740,.08,"sine",.035),60)}
+function playCorrectSound(){playTone(650,.1);setTimeout(()=>playTone(900,.12),90);setTimeout(()=>playTone(1150,.14),180)}
+function playWrongSound(){playTone(220,.16,"sawtooth");setTimeout(()=>playTone(150,.18,"sawtooth"),130)}
+function startBackgroundMusic(){
+    if(!musicEnabled||musicTimer) return;
+    initAudio();
+    const melody=[262,330,392,523,392,330,294,392];
+    let i=0;
+    musicTimer=setInterval(()=>playTone(melody[i++%melody.length],.25,"triangle",.025),340);
+}
+function stopBackgroundMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}}
+function toggleMusic(){
+    initAudio();
+    musicEnabled=!musicEnabled;
+    soundEnabled=musicEnabled;
+    localStorage.setItem("musicEnabled",musicEnabled);
+    localStorage.setItem("soundEnabled",soundEnabled);
+    if(musicEnabled){startBackgroundMusic();showToast("🎵 Sound ON")}else{stopBackgroundMusic();showToast("🔇 Sound OFF")}
+}
+document.addEventListener("click",e=>{if(e.target.tagName==="BUTTON")playButtonSound()});
+
+const banks={
+bollywood:[
+{q:"Who is popularly called Big B in Bollywood?",hi:"बॉलीवुड में बिग बी किसे कहा जाता है?",a:["Amitabh Bachchan","Salman Khan","Aamir Khan","Ranbir Kapoor"],ha:["अमिताभ बच्चन","सलमान खान","आमिर खान","रणबीर कपूर"],c:0},
+{q:"Which of these is a Bollywood movie?",hi:"इनमें से कौन सी बॉलीवुड फिल्म है?",a:["Sholay","Avatar","Titanic","Inception"],ha:["शोले","अवतार","टाइटैनिक","इंसेप्शन"],c:0},
+{q:"Which actor is called Mr. Perfectionist?",hi:"मिस्टर परफेक्शनिस्ट किस अभिनेता को कहा जाता है?",a:["Aamir Khan","Akshay Kumar","Ajay Devgn","Hrithik Roshan"],ha:["आमिर खान","अक्षय कुमार","अजय देवगन","ऋतिक रोशन"],c:0},
+{q:"Which film has the dialogue 'Kitne aadmi the'?",hi:"'कितने आदमी थे' संवाद किस फिल्म से है?",a:["Sholay","Dangal","PK","War"],ha:["शोले","दंगल","पीके","वॉर"],c:0}
+],
+geopolitics:[
+{q:"What is the United Nations mainly created for?",hi:"संयुक्त राष्ट्र मुख्य रूप से किस लिए बनाया गया था?",a:["International peace and cooperation","Cricket tournaments","Movie awards","Space tourism"],ha:["अंतरराष्ट्रीय शांति और सहयोग","क्रिकेट टूर्नामेंट","फिल्म पुरस्कार","अंतरिक्ष पर्यटन"],c:0},
+{q:"Which organization is a military alliance?",hi:"इनमें से कौन सा सैन्य गठबंधन है?",a:["NATO","FIFA","OPEC","UNESCO"],ha:["नाटो","फीफा","ओपेक","यूनेस्को"],c:0},
+{q:"BRICS is mainly a group of what?",hi:"BRICS मुख्य रूप से किसका समूह है?",a:["Emerging economies","Football clubs","Space agencies","Film studios"],ha:["उभरती अर्थव्यवस्थाएँ","फुटबॉल क्लब","अंतरिक्ष एजेंसियाँ","फिल्म स्टूडियो"],c:0},
+{q:"Which body has permanent members with veto power?",hi:"किस संस्था में वीटो शक्ति वाले स्थायी सदस्य होते हैं?",a:["UN Security Council","FIFA Council","Olympic Committee","Netflix Board"],ha:["संयुक्त राष्ट्र सुरक्षा परिषद","फीफा परिषद","ओलंपिक समिति","नेटफ्लिक्स बोर्ड"],c:0},
+{q:"What does G20 mainly represent?",hi:"G20 मुख्य रूप से क्या दर्शाता है?",a:["Major global economies","Twenty planets","Movie studios","Cricket league"],ha:["प्रमुख वैश्विक अर्थव्यवस्थाएँ","बीस ग्रह","फिल्म स्टूडियो","क्रिकेट लीग"],c:0},
+{q:"OPEC is mainly related to which resource?",hi:"OPEC मुख्य रूप से किस संसाधन से संबंधित है?",a:["Oil","Gold","Water","Wheat"],ha:["तेल","सोना","पानी","गेहूं"],c:0},
+{q:"ASEAN is mainly associated with which region?",hi:"ASEAN मुख्य रूप से किस क्षेत्र से संबंधित है?",a:["Southeast Asia","North America","Antarctica","Western Europe"],ha:["दक्षिण-पूर्व एशिया","उत्तरी अमेरिका","अंटार्कटिका","पश्चिमी यूरोप"],c:0}
+],
+capital:[
+{q:"What is the capital of India?",hi:"भारत की राजधानी क्या है?",a:["New Delhi","Mumbai","Kolkata","Chennai"],ha:["नई दिल्ली","मुंबई","कोलकाता","चेन्नई"],c:0},
+{q:"What is the capital of Uganda?",hi:"युगांडा की राजधानी क्या है?",a:["Kampala","Nairobi","Cairo","Accra"],ha:["कंपाला","नैरोबी","काहिरा","अकरा"],c:0},
+{q:"What is the capital of Japan?",hi:"जापान की राजधानी क्या है?",a:["Tokyo","Kyoto","Osaka","Seoul"],ha:["टोक्यो","क्योटो","ओसाका","सियोल"],c:0}
+],
+currency:[
+{q:"What is the currency of India?",hi:"भारत की मुद्रा क्या है?",a:["Rupee","Yen","Euro","Dollar"],ha:["रुपया","येन","यूरो","डॉलर"],c:0},
+{q:"What is the currency of Japan?",hi:"जापान की मुद्रा क्या है?",a:["Yen","Rupee","Pound","Dirham"],ha:["येन","रुपया","पाउंड","दिरहम"],c:0}
+],
+science:[
+{q:"What gas do humans breathe in?",hi:"मनुष्य कौन सी गैस सांस लेते हैं?",a:["Oxygen","Helium","Carbon Dioxide","Hydrogen"],ha:["ऑक्सीजन","हीलियम","कार्बन डाइऑक्साइड","हाइड्रोजन"],c:0},
+{q:"What is H2O?",hi:"H2O क्या है?",a:["Water","Salt","Gold","Oxygen"],ha:["पानी","नमक","सोना","ऑक्सीजन"],c:0}
+],
+animal:[
+{q:"Which is the fastest land animal?",hi:"सबसे तेज जमीन वाला जानवर कौन सा है?",a:["Cheetah","Lion","Horse","Tiger"],ha:["चीता","शेर","घोड़ा","बाघ"],c:0},
+{q:"Which animal is called ship of the desert?",hi:"किस जानवर को रेगिस्तान का जहाज कहा जाता है?",a:["Camel","Horse","Goat","Yak"],ha:["ऊंट","घोड़ा","बकरी","याक"],c:0}
+],
+math:[
+{q:"What is 12 × 12?",hi:"12 × 12 कितना होता है?",a:["144","124","122","154"],ha:["144","124","122","154"],c:0},
+{q:"Smallest prime number?",hi:"सबसे छोटी अभाज्य संख्या?",a:["2","1","0","3"],ha:["2","1","0","3"],c:0}
+],
+sports:[
+{q:"FIFA is related to which sport?",hi:"FIFA किस खेल से जुड़ा है?",a:["Football","Cricket","Tennis","Hockey"],ha:["फुटबॉल","क्रिकेट","टेनिस","हॉकी"],c:0},
+{q:"How many players are in a cricket team on field?",hi:"क्रिकेट टीम में मैदान पर कितने खिलाड़ी होते हैं?",a:["11","9","10","12"],ha:["11","9","10","12"],c:0}
+],
+history:[
+{q:"India became independent in which year?",hi:"भारत किस वर्ष स्वतंत्र हुआ?",a:["1947","1950","1930","1962"],ha:["1947","1950","1930","1962"],c:0},
+{q:"Which war ended in 1945?",hi:"कौन सा युद्ध 1945 में समाप्त हुआ?",a:["World War II","World War I","Cold War","Vietnam War"],ha:["द्वितीय विश्व युद्ध","प्रथम विश्व युद्ध","शीत युद्ध","वियतनाम युद्ध"],c:0}
+],
+technology:[
+{q:"Which company created Android?",hi:"Android किस कंपनी ने बनाया?",a:["Google","Apple","Microsoft","Tesla"],ha:["गूगल","एप्पल","माइक्रोसॉफ्ट","टेस्ला"],c:0},
+{q:"What does AI stand for?",hi:"AI का पूरा नाम क्या है?",a:["Artificial Intelligence","Auto Internet","Applied Input","Advanced India"],ha:["आर्टिफिशियल इंटेलिजेंस","ऑटो इंटरनेट","एप्लाइड इनपुट","एडवांस्ड इंडिया"],c:0}
+],
+planets:[
+{q:"Which planet is known as the Red Planet?",hi:"किस ग्रह को लाल ग्रह कहा जाता है?",a:["Mars","Earth","Venus","Jupiter"],ha:["मंगल","पृथ्वी","शुक्र","बृहस्पति"],c:0},
+{q:"Largest planet in our solar system?",hi:"सौरमंडल का सबसे बड़ा ग्रह कौन सा है?",a:["Jupiter","Mars","Mercury","Earth"],ha:["बृहस्पति","मंगल","बुध","पृथ्वी"],c:0}
+],
+leaders:[
+{q:"Who is known as the Iron Man of India?",hi:"भारत के लौह पुरुष किसे कहा जाता है?",a:["Sardar Patel","Nehru","Gandhi","Ambedkar"],ha:["सरदार पटेल","नेहरू","गांधी","आंबेडकर"],c:0},
+{q:"Who was the first President of India?",hi:"भारत के पहले राष्ट्रपति कौन थे?",a:["Dr. Rajendra Prasad","A. P. J. Abdul Kalam","Sardar Patel","Lal Bahadur Shastri"],ha:["डॉ. राजेंद्र प्रसाद","ए. पी. जे. अब्दुल कलाम","सरदार पटेल","लाल बहादुर शास्त्री"],c:0}
+]
 };
 
-function shuffleAnswerObject(item){
-    const useHindi = lang() === "hi";
-    const questionText = useHindi ? item.hq : item.q;
-    const answers = useHindi ? item.ha : item.a;
-    const correctAnswer = answers[item.c];
-    const shuffled = shuffle(answers);
-    return {
-        q: questionText,
-        a: shuffled,
-        c: shuffled.indexOf(correctAnswer)
-    };
+let mode="endless",score=0,streak=0,lives=3,qCount=0,current=null,locked=false,timer=null,timeLeft=15;
+const menu=document.getElementById("menu"),quiz=document.getElementById("quiz"),result=document.getElementById("result"),leaderboard=document.getElementById("leaderboard"),achievements=document.getElementById("achievements");
+
+const achList=[
+{id:"first",name:"First Challenge",desc:"Start your first quiz",reward:50},
+{id:"score500",name:"Quick Learner",desc:"Reach 500 score",reward:100},
+{id:"score1500",name:"GK Warrior",desc:"Reach 1500 score",reward:150},
+{id:"streak3",name:"Hot Streak",desc:"Get 3 correct in a row",reward:100},
+{id:"geo",name:"Geo Strategist",desc:"Play World Geo Politics",reward:120},
+{id:"bolly",name:"Bollywood Buff",desc:"Play Bollywood category",reward:120}
+];
+let unlocked=JSON.parse(localStorage.getItem("quizAchievements")||"[]");
+let xp=parseInt(localStorage.getItem("playerXP")||"0");
+
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5)}
+function lang(){return document.getElementById("language").value}
+function category(){return document.getElementById("category").value}
+
+function updateXP(){
+    const level=Math.floor(xp/500)+1;
+    const current=xp%500;
+    document.getElementById("levelText").innerText="Level "+level+" • XP "+current+"/500";
+    document.getElementById("xpBar").style.width=(current/500*100)+"%";
+}
+function unlock(id){
+    if(unlocked.includes(id)) return;
+    const a=achList.find(x=>x.id===id);
+    if(!a) return;
+    unlocked.push(id);
+    localStorage.setItem("quizAchievements",JSON.stringify(unlocked));
+    xp+=a.reward;
+    localStorage.setItem("playerXP",xp);
+    updateXP();
+    showToast("🏅 "+a.name+" +"+a.reward+" XP");
+}
+function renderAchievements(){
+    document.getElementById("achievementList").innerHTML=achList.map(a=>`
+        <div class="achItem ${unlocked.includes(a.id)?"unlocked":""}">
+            <div>${unlocked.includes(a.id)?"✅":"🔒"} <b>${a.name}</b><br><small>${a.desc}</small></div>
+            <b>+${a.reward} XP</b>
+        </div>
+    `).join("");
 }
 
-function generateQuestionBySelectedCategory(){
-    let selected = cat();
 
-    if(!categoryBanks[selected]){
-        selected = "mixed";
+const translations = {
+    gu:{
+        prefixQuestion:"પ્રશ્ન ",
+        correct:"સાચું! +",
+        wrong:"ખોટું!",
+        timeup:"સમય પૂરો!",
+        score:"સ્કોર",
+        streak:"સ્ટ્રીક",
+        lives:"લાઇફ"
+    },
+    mr:{
+        prefixQuestion:"प्रश्न ",
+        correct:"बरोबर! +",
+        wrong:"चूक!",
+        timeup:"वेळ संपली!",
+        score:"स्कोर",
+        streak:"स्ट्रीक",
+        lives:"लाईफ"
+    },
+    bn:{
+        prefixQuestion:"প্রশ্ন ",
+        correct:"সঠিক! +",
+        wrong:"ভুল!",
+        timeup:"সময় শেষ!",
+        score:"স্কোর",
+        streak:"স্ট্রিক",
+        lives:"লাইফ"
+    },
+    hi:{
+        prefixQuestion:"प्रश्न ",
+        correct:"सही! +",
+        wrong:"गलत!",
+        timeup:"समय समाप्त!",
+        score:"स्कोर",
+        streak:"स्ट्रीक",
+        lives:"लाइफ"
+    },
+    en:{
+        prefixQuestion:"Question ",
+        correct:"Correct! +",
+        wrong:"Wrong!",
+        timeup:"Time Up!",
+        score:"Score",
+        streak:"Streak",
+        lives:"Lives"
     }
+};
 
-    if(selected === "mixed"){
-        const keys = Object.keys(categoryBanks).filter(k => k !== "mixed");
-        selected = pick(keys);
+const multilingualQuestions = {
+    geopolitics:{
+        gu:[
+            {q:"સંયુક્ત રાષ્ટ્ર મુખ્યત્વે શા માટે બનાવાયું હતું?",a:["આંતરરાષ્ટ્રીય શાંતિ અને સહકાર","ક્રિકેટ ટુર્નામેન્ટ","ફિલ્મ એવોર્ડ","અંતરિક્ષ પ્રવાસ"],c:0},
+            {q:"કયું સંગઠન સૈન્ય ગઠબંધન છે?",a:["નાટો","ફિફા","ઓપેક","યુનેસ્કો"],c:0},
+            {q:"G20 મુખ્યત્વે શું દર્શાવે છે?",a:["મુખ્ય વૈશ્વિક અર્થતંત્રો","વીસ ગ્રહો","ફિલ્મ સ્ટુડિયો","ક્રિકેટ લીગ"],c:0}
+        ],
+        mr:[
+            {q:"संयुक्त राष्ट्र मुख्यतः कशासाठी स्थापन झाले?",a:["आंतरराष्ट्रीय शांतता आणि सहकार्य","क्रिकेट स्पर्धा","चित्रपट पुरस्कार","अंतरिक्ष पर्यटन"],c:0},
+            {q:"खालीलपैकी कोणते लष्करी आघाडी आहे?",a:["नाटो","फिफा","ओपेक","युनेस्को"],c:0},
+            {q:"G20 मुख्यतः काय दर्शवते?",a:["प्रमुख जागतिक अर्थव्यवस्था","वीस ग्रह","चित्रपट स्टुडिओ","क्रिकेट लीग"],c:0}
+        ],
+        bn:[
+            {q:"জাতিসংঘ মূলত কী জন্য তৈরি হয়েছিল?",a:["আন্তর্জাতিক শান্তি ও সহযোগিতা","ক্রিকেট টুর্নামেন্ট","সিনেমা পুরস্কার","মহাকাশ পর্যটন"],c:0},
+            {q:"কোন সংগঠনটি একটি সামরিক জোট?",a:["ন্যাটো","ফিফা","ওপেক","ইউনেস্কো"],c:0},
+            {q:"G20 মূলত কী প্রতিনিধিত্ব করে?",a:["প্রধান বৈশ্বিক অর্থনীতি","বিশটি গ্রহ","সিনেমা স্টুডিও","ক্রিকেট লিগ"],c:0}
+        ]
+    },
+    bollywood:{
+        gu:[
+            {q:"બોલિવૂડમાં બિગ બી તરીકે કોણ ઓળખાય છે?",a:["અમિતાભ બચ્ચન","સલમાન ખાન","આમિર ખાન","રણબીર કપૂર"],c:0},
+            {q:"આમાંથી કઈ બોલિવૂડ ફિલ્મ છે?",a:["શોલે","અવતાર","ટાઇટેનિક","ઇન્સેપ્શન"],c:0}
+        ],
+        mr:[
+            {q:"बॉलीवूडमध्ये बिग बी म्हणून कोण ओळखले जातात?",a:["अमिताभ बच्चन","सलमान खान","आमिर खान","रणबीर कपूर"],c:0},
+            {q:"खालीलपैकी कोणता बॉलीवूड चित्रपट आहे?",a:["शोले","अवतार","टायटॅनिक","इन्सेप्शन"],c:0}
+        ],
+        bn:[
+            {q:"বলিউডে বিগ বি নামে কে পরিচিত?",a:["অমিতাভ বচ্চন","সালমান খান","আমির খান","রণবীর কাপুর"],c:0},
+            {q:"নিচের কোনটি বলিউড সিনেমা?",a:["শোলে","অ্যাভাটার","টাইটানিক","ইনসেপশন"],c:0}
+        ]
+    },
+    science:{
+        gu:[{q:"માનવ જીવવા માટે કયો વાયુ શ્વાસમાં લે છે?",a:["ઓક્સિજન","હીલિયમ","કાર્બન ડાયોક્સાઇડ","હાઈડ્રોજન"],c:0},{q:"H2O શું છે?",a:["પાણી","મીઠું","સોનું","ઓક્સિજન"],c:0}],
+        mr:[{q:"मनुष्य जगण्यासाठी कोणता वायू श्वासात घेतो?",a:["ऑक्सिजन","हेलियम","कार्बन डायऑक्साइड","हायड्रोजन"],c:0},{q:"H2O म्हणजे काय?",a:["पाणी","मीठ","सोने","ऑक्सिजन"],c:0}],
+        bn:[{q:"মানুষ বাঁচতে কোন গ্যাস শ্বাস নেয়?",a:["অক্সিজেন","হিলিয়াম","কার্বন ডাই অক্সাইড","হাইড্রোজেন"],c:0},{q:"H2O কী?",a:["জল","লবণ","সোনা","অক্সিজেন"],c:0}]
+    },
+    capital:{
+        gu:[{q:"ભારતની રાજધાની શું છે?",a:["નવી દિલ્હી","મુંબઈ","કોલકાતા","ચેન્નાઈ"],c:0},{q:"યુગાંડાની રાજધાની શું છે?",a:["કંપાલા","નૈરોબી","કૈરો","અક્રા"],c:0}],
+        mr:[{q:"भारताची राजधानी कोणती?",a:["नवी दिल्ली","मुंबई","कोलकाता","चेन्नई"],c:0},{q:"युगांडाची राजधानी कोणती?",a:["कंपाला","नैरोबी","कैरो","अक्रा"],c:0}],
+        bn:[{q:"ভারতের রাজধানী কী?",a:["নিউ দিল্লি","মুম্বাই","কলকাতা","চেন্নাই"],c:0},{q:"উগান্ডার রাজধানী কী?",a:["কাম্পালা","নাইরোবি","কায়রো","আক্রা"],c:0}]
+    },
+    currency:{
+        gu:[{q:"ભારતની ચલણ શું છે?",a:["રૂપિયો","યેન","યુરો","ડોલર"],c:0}],
+        mr:[{q:"भारताचे चलन काय आहे?",a:["रुपया","येन","युरो","डॉलर"],c:0}],
+        bn:[{q:"ভারতের মুদ্রা কী?",a:["রুপি","ইয়েন","ইউরো","ডলার"],c:0}]
+    },
+    animal:{
+        gu:[{q:"સૌથી ઝડપી જમીન પ્રાણી કયું છે?",a:["ચીતા","સિંહ","ઘોડો","વાઘ"],c:0}],
+        mr:[{q:"सर्वात वेगवान स्थल प्राणी कोणता?",a:["चित्ता","सिंह","घोडा","वाघ"],c:0}],
+        bn:[{q:"সবচেয়ে দ্রুত স্থল প্রাণী কোনটি?",a:["চিতা","সিংহ","ঘোড়া","বাঘ"],c:0}]
+    },
+    math:{
+        gu:[{q:"12 × 12 કેટલું થાય?",a:["144","124","122","154"],c:0}],
+        mr:[{q:"12 × 12 किती?",a:["144","124","122","154"],c:0}],
+        bn:[{q:"12 × 12 কত?",a:["144","124","122","154"],c:0}]
+    },
+    sports:{
+        gu:[{q:"FIFA કયા રમત સાથે જોડાયેલું છે?",a:["ફૂટબોલ","ક્રિકેટ","ટેનિસ","હોકી"],c:0}],
+        mr:[{q:"FIFA कोणत्या खेळाशी संबंधित आहे?",a:["फुटबॉल","क्रिकेट","टेनिस","हॉकी"],c:0}],
+        bn:[{q:"FIFA কোন খেলার সঙ্গে যুক্ত?",a:["ফুটবল","ক্রিকেট","টেনিস","হকি"],c:0}]
+    },
+    history:{
+        gu:[{q:"ભારત કયા વર્ષે સ્વતંત્ર થયું?",a:["1947","1950","1930","1962"],c:0}],
+        mr:[{q:"भारत कोणत्या वर्षी स्वतंत्र झाला?",a:["1947","1950","1930","1962"],c:0}],
+        bn:[{q:"ভারত কোন বছরে স্বাধীন হয়?",a:["1947","1950","1930","1962"],c:0}]
+    },
+    technology:{
+        gu:[{q:"Android કઈ કંપનીએ બનાવ્યું?",a:["ગૂગલ","એપલ","માઇક્રોસોફ્ટ","ટેસ્લા"],c:0}],
+        mr:[{q:"Android कोणत्या कंपनीने तयार केले?",a:["Google","Apple","Microsoft","Tesla"],c:0}],
+        bn:[{q:"Android কোন কোম্পানি তৈরি করেছে?",a:["Google","Apple","Microsoft","Tesla"],c:0}]
+    },
+    planets:{
+        gu:[{q:"લાલ ગ્રહ તરીકે કયો ગ્રહ ઓળખાય છે?",a:["મંગળ","પૃથ્વી","શુક્ર","બૃહસ્પતિ"],c:0}],
+        mr:[{q:"लाल ग्रह म्हणून कोणता ग्रह ओळखला जातो?",a:["मंगळ","पृथ्वी","शुक्र","गुरू"],c:0}],
+        bn:[{q:"লাল গ্রহ নামে কোন গ্রহ পরিচিত?",a:["মঙ্গল","পৃথিবী","শুক্র","বৃহস্পতি"],c:0}]
+    },
+    leaders:{
+        gu:[{q:"ભારતના લોખંડી પુરુષ કોણ કહેવાય છે?",a:["સરદાર પટેલ","નેહરુ","ગાંધી","આંબેડકર"],c:0}],
+        mr:[{q:"भारताचे लोहपुरुष कोण?",a:["सरदार पटेल","नेहरू","गांधी","आंबेडकर"],c:0}],
+        bn:[{q:"ভারতের লৌহমানব কে?",a:["সর্দার প্যাটেল","নেহরু","গান্ধী","আম্বেদকর"],c:0}]
     }
+};
 
-    const bank = categoryBanks[selected];
-
-    if(!bank || bank.length === 0){
-        return {
-            q: "Which organization is mainly created for international peace and cooperation?",
-            a: ["United Nations","FIFA","Netflix","NASA"],
-            c: 0
-        };
-    }
-
-    return shuffleAnswerObject(pick(bank));
+function localizedText(key){
+    return (translations[lang()] || translations.en)[key];
 }
 
-</script></body></html>
+function makeQuestion(){
+    let selected=category();
+    const L=lang();
+
+    if(selected==="mixed"){
+        const keys=Object.keys(banks);
+        selected=pick(keys);
+    }
+
+    if(["gu","mr","bn"].includes(L) && multilingualQuestions[selected] && multilingualQuestions[selected][L]){
+        const item=pick(multilingualQuestions[selected][L]);
+        const correct=item.a[item.c];
+        const shuffled=shuffle(item.a);
+        return {q:item.q,a:shuffled,c:shuffled.indexOf(correct)};
+    }
+
+    const bank=banks[selected] || banks.geopolitics;
+    const item=pick(bank);
+    const question=L==="hi"?item.hi:item.q;
+    const answers=L==="hi"?item.ha:item.a;
+    const correct=answers[item.c];
+    const shuffled=shuffle(answers);
+    return {q:question,a:shuffled,c:shuffled.indexOf(correct)};
+}
+
+function hideAll(){
+    menu.style.display="none";
+    quiz.style.display="none";
+    result.style.display="none";
+    leaderboard.style.display="none";
+    achievements.style.display="none";
+}
+function showMenu(){
+    hideAll();
+    menu.style.display="block";
+    updateXP();
+}
+function updateLanguageLabels(){
+    const t=translations[lang()] || translations.en;
+    const labels=document.querySelectorAll(".stat b");
+    if(labels[0])labels[0].innerText=t.score;
+    if(labels[1])labels[1].innerText=t.streak;
+    if(labels[2])labels[2].innerText=t.lives;
+}
+
+function startGame(m){
+    updateLanguageLabels();
+    initAudio();
+    startBackgroundMusic();
+    unlock("first");
+    if(category()==="geopolitics") unlock("geo");
+    if(category()==="bollywood") unlock("bolly");
+    mode=m;score=0;streak=0;lives=3;qCount=0;
+    hideAll();
+    quiz.style.display="block";
+    updateStats();
+    nextQuestion();
+}
+function nextQuestion(){
+    if(lives<=0 || (mode==="classic" && qCount>=10)){endGame();return}
+    locked=false;qCount++;current=makeQuestion();
+    document.getElementById("qnum").innerText=localizedText("prefixQuestion")+qCount+(mode==="classic"?"/10":"");
+    document.getElementById("question").innerText=current.q;
+    document.getElementById("feedback").innerText="";
+    document.getElementById("feedback").className="";
+    const answers=document.getElementById("answers");answers.innerHTML="";
+    current.a.forEach((ans,i)=>{
+        const btn=document.createElement("button");
+        btn.className="answer";
+        btn.innerText=String.fromCharCode(65+i)+". "+ans;
+        btn.onclick=()=>choose(i,btn);
+        answers.appendChild(btn);
+    });
+    startTimer();
+}
+function startTimer(){
+    clearInterval(timer);timeLeft=15;
+    document.getElementById("timerBar").style.width="100%";
+    timer=setInterval(()=>{
+        timeLeft-=0.2;
+        document.getElementById("timerBar").style.width=Math.max(0,timeLeft/15*100)+"%";
+        if(timeLeft<=0){clearInterval(timer);timeoutAnswer()}
+    },200);
+}
+function choose(i,btn){
+    if(locked)return;locked=true;clearInterval(timer);
+    const all=document.querySelectorAll(".answer");
+    if(i===current.c){
+        playCorrectSound();
+        streak++;
+        const pts=100+Math.round(timeLeft*5)+(streak>=3?50:0);
+        score+=pts;
+        btn.classList.add("correct");
+        document.getElementById("feedback").innerText=localizedText("correct")+pts;
+        document.getElementById("feedback").className="good";
+        if(streak===3) unlock("streak3");
+        particles();
+        if(navigator.vibrate)navigator.vibrate(40);
+    }else{
+        playWrongSound();
+        lives--;streak=0;
+        btn.classList.add("wrong");
+        all[current.c].classList.add("correct");
+        document.getElementById("feedback").innerText=localizedText("wrong");
+        document.getElementById("feedback").className="bad";
+        if(navigator.vibrate)navigator.vibrate([60,40,60]);
+    }
+    updateStats();
+    setTimeout(nextQuestion,1000);
+}
+function timeoutAnswer(){
+    if(locked)return;locked=true;playWrongSound();lives--;streak=0;
+    const all=document.querySelectorAll(".answer");
+    if(all[current.c])all[current.c].classList.add("correct");
+    document.getElementById("feedback").innerText=localizedText("timeup");
+    document.getElementById("feedback").className="bad";
+    updateStats();
+    setTimeout(nextQuestion,1000);
+}
+function updateStats(){
+    document.getElementById("score").innerText=score;
+    document.getElementById("streak").innerText=streak;
+    document.getElementById("lives").innerText=lives;
+    if(score>=500)unlock("score500");
+    if(score>=1500)unlock("score1500");
+}
+function endGame(){
+    clearInterval(timer);
+    hideAll();
+    result.style.display="block";
+    document.getElementById("finalScore").innerText=score;
+    document.getElementById("rank").innerText=score>=1500?"GK Master":score>=700?"Smart Player":"Beginner";
+    saveScore();
+}
+function saveScore(){
+    const name=document.getElementById("playerName").value||"Player";
+    let list=JSON.parse(localStorage.getItem("leaderboard")||"[]");
+    list.push({name,score});
+    list.sort((a,b)=>b.score-a.score);
+    localStorage.setItem("leaderboard",JSON.stringify(list.slice(0,10)));
+}
+function showLeaderboard(){
+    hideAll();
+    leaderboard.style.display="block";
+    const list=JSON.parse(localStorage.getItem("leaderboard")||"[]");
+    document.getElementById("leaderList").innerHTML=list.length?list.map((x,i)=>`<div class="item"><span>${i+1}. ${x.name}</span><b>${x.score}</b></div>`).join(""):"No scores yet.";
+}
+function clearLeaderboard(){localStorage.removeItem("leaderboard");showLeaderboard()}
+function showAchievements(){
+    hideAll();
+    achievements.style.display="block";
+    renderAchievements();
+}
+function showToast(t){
+    const el=document.createElement("div");
+    el.className="toast";
+    el.innerText=t;
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),1800);
+}
+function particles(){
+    for(let i=0;i<14;i++){
+        const p=document.createElement("div");
+        p.className="particle";
+        p.style.left=(innerWidth/2)+"px";
+        p.style.top="145px";
+        document.body.appendChild(p);
+        const x=(Math.random()-.5)*260;
+        const y=(Math.random()-.5)*220;
+        p.animate([{transform:"translate(0,0)",opacity:1},{transform:`translate(${x}px,${y}px)`,opacity:0}],{duration:800});
+        setTimeout(()=>p.remove(),800);
+    }
+}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)stopBackgroundMusic();else if(musicEnabled)startBackgroundMusic()});
+updateXP();
+</script>
+</body>
+</html>
