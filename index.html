@@ -3,565 +3,171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>GK Quiz Rush</title>
+<title>GK Quiz Rush Pro</title>
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial, sans-serif;
-    -webkit-tap-highlight-color:transparent;
-}
-
-body{
-    min-height:100vh;
-    background:radial-gradient(circle at top,#1d3b68,#07101f 70%);
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:14px;
-    overflow-x:hidden;
-}
-
-#game{
-    width:100%;
-    max-width:460px;
-    text-align:center;
-}
-
-h1{
-    margin:8px 0 12px;
-    font-size:34px;
-    color:#ffd54a;
-    text-shadow:0 0 18px #ffb300;
-}
-
-.card{
-    background:rgba(255,255,255,0.09);
-    border-radius:24px;
-    padding:18px;
-    margin-top:14px;
-    box-shadow:0 0 24px rgba(0,0,0,0.35);
-    border:1px solid rgba(255,255,255,0.08);
-}
-
-#scoreBar{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:8px;
-    font-weight:bold;
-}
-
-.stat{
-    background:rgba(0,0,0,0.25);
-    border-radius:14px;
-    padding:10px 6px;
-    font-size:14px;
-}
-
-.stat span{
-    display:block;
-    margin-top:4px;
-    font-size:20px;
-    color:#00ffcc;
-}
-
-#timerWrap{
-    width:100%;
-    height:12px;
-    background:#222;
-    border-radius:20px;
-    overflow:hidden;
-    margin:14px 0;
-}
-
-#timerBar{
-    height:100%;
-    width:100%;
-    background:linear-gradient(90deg,#00ffcc,#ffd54a,#ff5252);
-    transition:width 0.2s linear;
-}
-
-#questionNumber{
-    font-size:14px;
-    color:#ccc;
-    margin-bottom:8px;
-}
-
-#question{
-    font-size:23px;
-    font-weight:bold;
-    line-height:1.35;
-    margin-bottom:16px;
-}
-
-.answerBtn{
-    width:100%;
-    display:block;
-    margin:10px 0;
-    padding:15px;
-    border:none;
-    border-radius:18px;
-    font-size:17px;
-    font-weight:bold;
-    color:white;
-    background:linear-gradient(135deg,#26395f,#18253f);
-    box-shadow:0 5px 14px rgba(0,0,0,0.28);
-    cursor:pointer;
-}
-
-.answerBtn:active{
-    transform:scale(0.97);
-}
-
-.correct{
-    background:linear-gradient(135deg,#00c853,#009624)!important;
-}
-
-.wrong{
-    background:linear-gradient(135deg,#ff5252,#b71c1c)!important;
-}
-
-#feedback{
-    min-height:28px;
-    margin-top:12px;
-    font-size:20px;
-    font-weight:bold;
-}
-
-.good{
-    color:#00ffcc;
-}
-
-.bad{
-    color:#ff6b6b;
-}
-
-button.mainBtn{
-    width:100%;
-    border:none;
-    padding:15px;
-    border-radius:18px;
-    font-size:18px;
-    font-weight:bold;
-    margin-top:12px;
-    cursor:pointer;
-    background:linear-gradient(45deg,#ffd54a,#ff9800);
-    color:#111;
-    box-shadow:0 6px 20px rgba(255,193,7,0.3);
-}
-
-button.darkBtn{
-    background:#222;
-    color:white;
-}
-
-#startScreen,#resultScreen{
-    display:block;
-}
-
-#quizScreen,#resultScreen{
-    display:none;
-}
-
-#resultTitle{
-    font-size:30px;
-    color:#ffd54a;
-    margin-bottom:10px;
-}
-
-#finalScore{
-    font-size:42px;
-    color:#00ffcc;
-    font-weight:bold;
-    text-shadow:0 0 14px #00ffcc;
-}
-
-#highScore{
-    margin-top:8px;
-    color:#ddd;
-}
-
-.badge{
-    margin-top:12px;
-    background:rgba(255,215,74,0.16);
-    border:1px solid rgba(255,215,74,0.35);
-    border-radius:16px;
-    padding:12px;
-    color:#ffd54a;
-    font-weight:bold;
-}
-
-.toast{
-    position:fixed;
-    top:18%;
-    left:50%;
-    transform:translateX(-50%);
-    background:linear-gradient(45deg,#ffd54a,#ff9800);
-    color:#111;
-    padding:14px 22px;
-    border-radius:18px;
-    font-weight:bold;
-    font-size:22px;
-    z-index:1000;
-    box-shadow:0 0 24px #ffd54a;
-    animation:pop 1.8s forwards;
-}
-
-@keyframes pop{
-    0%{opacity:0;transform:translateX(-50%) scale(.5);}
-    20%{opacity:1;transform:translateX(-50%) scale(1.08);}
-    80%{opacity:1;}
-    100%{opacity:0;transform:translateX(-50%) scale(1.4);}
-}
-
-.small{
-    color:#ccc;
-    font-size:14px;
-    line-height:1.5;
-    margin-top:10px;
-}
-
-@media(max-width:480px){
-    h1{font-size:30px;}
-    #question{font-size:20px;}
-    .answerBtn{font-size:16px;padding:14px;}
-}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+body{min-height:100vh;background:radial-gradient(circle at top,#213b70,#07101f 70%);color:white;display:flex;justify-content:center;align-items:flex-start;padding:14px;overflow-x:hidden}
+#game{width:100%;max-width:480px;text-align:center}
+h1{margin:8px 0 12px;font-size:34px;color:#ffd54a;text-shadow:0 0 18px #ffb300}
+.card{background:rgba(255,255,255,.09);border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 0 24px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.08);animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+#scoreBar{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-weight:bold}
+.stat{background:rgba(0,0,0,.25);border-radius:14px;padding:10px 6px;font-size:14px}
+.stat span{display:block;margin-top:4px;font-size:20px;color:#00ffcc}
+#timerWrap{width:100%;height:12px;background:#222;border-radius:20px;overflow:hidden;margin:14px 0}
+#timerBar{height:100%;width:100%;background:linear-gradient(90deg,#00ffcc,#ffd54a,#ff5252);transition:width .2s linear}
+#questionNumber{font-size:14px;color:#ccc;margin-bottom:8px}
+#question{font-size:22px;font-weight:bold;line-height:1.35;margin-bottom:16px;animation:questionPop .25s ease}
+@keyframes questionPop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
+.answerBtn{width:100%;display:block;margin:10px 0;padding:15px;border:none;border-radius:18px;font-size:17px;font-weight:bold;color:white;background:linear-gradient(135deg,#26395f,#18253f);box-shadow:0 5px 14px rgba(0,0,0,.28);cursor:pointer;animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.answerBtn:active{transform:scale(.97)}
+.correct{background:linear-gradient(135deg,#00c853,#009624)!important}
+.wrong{background:linear-gradient(135deg,#ff5252,#b71c1c)!important}
+#feedback{min-height:28px;margin-top:12px;font-size:20px;font-weight:bold}.good{color:#00ffcc}.bad{color:#ff6b6b}
+button.mainBtn,select,input{width:100%;border:none;padding:14px;border-radius:16px;font-size:16px;font-weight:bold;margin-top:10px}
+button.mainBtn{cursor:pointer;background:linear-gradient(45deg,#ffd54a,#ff9800);color:#111;box-shadow:0 6px 20px rgba(255,193,7,.3)}
+button.darkBtn{background:#222;color:white}
+select,input{background:#121b2d;color:white;border:1px solid rgba(255,255,255,.18)}
+#quizScreen,#resultScreen,#leaderboardScreen{display:none}
+#resultTitle{font-size:30px;color:#ffd54a;margin-bottom:10px}
+#finalScore{font-size:42px;color:#00ffcc;font-weight:bold;text-shadow:0 0 14px #00ffcc}
+.badge{margin-top:12px;background:rgba(255,215,74,.16);border:1px solid rgba(255,215,74,.35);border-radius:16px;padding:12px;color:#ffd54a;font-weight:bold}
+.toast{position:fixed;top:18%;left:50%;transform:translateX(-50%);background:linear-gradient(45deg,#ffd54a,#ff9800);color:#111;padding:14px 22px;border-radius:18px;font-weight:bold;font-size:22px;z-index:1000;box-shadow:0 0 24px #ffd54a;animation:pop 1.8s forwards}
+@keyframes pop{0%{opacity:0;transform:translateX(-50%) scale(.5)}20%{opacity:1;transform:translateX(-50%) scale(1.08)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1.4)}}
+.small{color:#ccc;font-size:14px;line-height:1.5;margin-top:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.leaderItem{display:flex;justify-content:space-between;background:rgba(0,0,0,.25);border-radius:14px;padding:10px;margin-top:8px}
+@media(max-width:480px){h1{font-size:30px}#question{font-size:20px}.answerBtn{font-size:16px;padding:14px}.grid2{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 <div id="game">
+<h1 id="title">GK Quiz Rush Pro</h1>
 
-    <h1>GK Quiz Rush</h1>
+<div id="startScreen" class="card">
+<h2 id="menuTitle">AI-Style Endless Quiz</h2>
+<p class="small" id="menuDesc">Choose category, language, and mode. No paid API required.</p>
 
-    <div id="startScreen" class="card">
-        <h2>Play General Knowledge Quiz</h2>
-        <p class="small">
-            Answer fast, build streaks, and beat your high score.
-            Perfect for mobile and YouTube Playables-style gameplay.
-        </p>
+<input id="playerName" placeholder="Player name" value="Player 1">
 
-        <div class="badge">
-            10 Questions • 15 Seconds Each • Streak Bonus
-        </div>
+<div class="grid2">
+<select id="languageSelect"><option value="en">English</option><option value="hi">Hindi</option></select>
+<select id="categorySelect"><option value="mixed">Mixed GK</option><option value="capital">Capitals</option><option value="currency">Currencies</option><option value="science">Science</option><option value="animal">Animals</option><option value="math">Math</option></select>
+</div>
 
-        <button class="mainBtn" onclick="startGame()">Start Quiz</button>
-    </div>
+<div class="grid2">
+<button class="mainBtn" onclick="startGame('endless')">Endless</button>
+<button class="mainBtn" onclick="startGame('classic')">10 Questions</button>
+</div>
+<div class="grid2">
+<button class="mainBtn darkBtn" onclick="startMultiplayer()">2 Player Mode</button>
+<button class="mainBtn darkBtn" onclick="showLeaderboard()">Leaderboard</button>
+</div>
+<button class="mainBtn darkBtn" onclick="toggleMusic()">🎵 Music On/Off</button>
+<div class="badge" id="menuBadge">Streak Bonus • Local Leaderboard • Hindi + English</div>
+</div>
 
-    <div id="quizScreen">
+<div id="quizScreen">
+<div id="scoreBar" class="card">
+<div class="stat"><span id="scoreLabel">Score</span><span id="score">0</span></div>
+<div class="stat"><span id="streakLabel">Streak</span><span id="streak">0</span></div>
+<div class="stat"><span id="livesLabel">Lives</span><span id="lives">3</span></div>
+</div>
+<div class="card">
+<div id="playerTurn"></div>
+<div id="questionNumber">Question 1</div>
+<div id="timerWrap"><div id="timerBar"></div></div>
+<div id="question">Question text</div>
+<div id="answers"></div>
+<div id="feedback"></div>
+</div>
+</div>
 
-        <div id="scoreBar" class="card">
-            <div class="stat">Score<span id="score">0</span></div>
-            <div class="stat">Streak<span id="streak">0</span></div>
-            <div class="stat">Lives<span id="lives">3</span></div>
-        </div>
+<div id="resultScreen" class="card">
+<div id="resultTitle">Quiz Complete!</div>
+<div id="finalScore">0</div>
+<div id="highScore">Best: 0</div>
+<div class="badge" id="rankText">Rank</div>
+<button class="mainBtn" onclick="startGame('endless')">Play Again</button>
+<button class="mainBtn darkBtn" onclick="showStart()">Main Menu</button>
+<button class="mainBtn darkBtn" onclick="showLeaderboard()">Leaderboard</button>
+</div>
 
-        <div class="card">
-            <div id="questionNumber">Question 1/10</div>
-
-            <div id="timerWrap">
-                <div id="timerBar"></div>
-            </div>
-
-            <div id="question">Question text</div>
-
-            <div id="answers"></div>
-
-            <div id="feedback"></div>
-        </div>
-    </div>
-
-    <div id="resultScreen" class="card">
-        <div id="resultTitle">Quiz Complete!</div>
-        <div id="finalScore">0</div>
-        <div id="highScore">Best: 0</div>
-        <div class="badge" id="rankText">Rank</div>
-
-        <button class="mainBtn" onclick="startGame()">Play Again</button>
-        <button class="mainBtn darkBtn" onclick="resetBest()">Reset Best Score</button>
-    </div>
-
+<div id="leaderboardScreen" class="card">
+<h2>🏆 Leaderboard</h2>
+<div id="leaderList"></div>
+<button class="mainBtn darkBtn" onclick="clearLeaderboard()">Clear Leaderboard</button>
+<button class="mainBtn" onclick="showStart()">Main Menu</button>
+</div>
 </div>
 
 <script>
-const questions = [
-    {
-        q:"What is the capital city of India?",
-        a:["Mumbai","New Delhi","Kolkata","Chennai"],
-        c:1
-    },
-    {
-        q:"Which planet is known as the Red Planet?",
-        a:["Earth","Venus","Mars","Jupiter"],
-        c:2
-    },
-    {
-        q:"How many continents are there in the world?",
-        a:["5","6","7","8"],
-        c:2
-    },
-    {
-        q:"Who wrote the Indian national anthem?",
-        a:["Mahatma Gandhi","Rabindranath Tagore","Subhas Chandra Bose","Jawaharlal Nehru"],
-        c:1
-    },
-    {
-        q:"Which is the largest ocean on Earth?",
-        a:["Atlantic Ocean","Indian Ocean","Pacific Ocean","Arctic Ocean"],
-        c:2
-    },
-    {
-        q:"What is the currency of Japan?",
-        a:["Yuan","Won","Yen","Dollar"],
-        c:2
-    },
-    {
-        q:"Which gas do plants absorb from the atmosphere?",
-        a:["Oxygen","Carbon Dioxide","Nitrogen","Hydrogen"],
-        c:1
-    },
-    {
-        q:"Who is known as the Father of Computers?",
-        a:["Charles Babbage","Albert Einstein","Isaac Newton","Bill Gates"],
-        c:0
-    },
-    {
-        q:"Which country is famous for the Eiffel Tower?",
-        a:["Italy","Germany","France","Spain"],
-        c:2
-    },
-    {
-        q:"What is the fastest land animal?",
-        a:["Lion","Cheetah","Horse","Tiger"],
-        c:1
-    },
-    {
-        q:"Which is the smallest prime number?",
-        a:["0","1","2","3"],
-        c:2
-    },
-    {
-        q:"Which organ pumps blood in the human body?",
-        a:["Brain","Liver","Heart","Lungs"],
-        c:2
-    },
-    {
-        q:"Which is the national animal of India?",
-        a:["Lion","Tiger","Elephant","Leopard"],
-        c:1
-    },
-    {
-        q:"How many days are there in a leap year?",
-        a:["364","365","366","367"],
-        c:2
-    },
-    {
-        q:"Which instrument is used to measure temperature?",
-        a:["Barometer","Thermometer","Speedometer","Hygrometer"],
-        c:1
-    }
+const bgMusic=new Audio("background.mp3");bgMusic.loop=true;bgMusic.volume=.35;let musicStarted=false;
+
+const data={
+capital:[["India","New Delhi","भारत","नई दिल्ली"],["France","Paris","फ्रांस","पेरिस"],["Japan","Tokyo","जापान","टोक्यो"],["Uganda","Kampala","युगांडा","कंपाला"],["Kenya","Nairobi","केन्या","नैरोबी"],["China","Beijing","चीन","बीजिंग"],["Germany","Berlin","जर्मनी","बर्लिन"],["Italy","Rome","इटली","रोम"],["Australia","Canberra","ऑस्ट्रेलिया","कैनबरा"]],
+currency:[["India","Rupee","भारत","रुपया"],["Japan","Yen","जापान","येन"],["USA","Dollar","अमेरिका","डॉलर"],["UK","Pound Sterling","यूके","पाउंड स्टर्लिंग"],["China","Yuan","चीन","युआन"],["Uganda","Ugandan Shilling","युगांडा","युगांडन शिलिंग"],["UAE","Dirham","यूएई","दिरहम"]],
+science:[["chemical symbol for water","H2O","पानी का रासायनिक सूत्र","H2O"],["gas humans breathe in","Oxygen","मनुष्य कौन सी गैस सांस लेते हैं","ऑक्सीजन"],["gas plants absorb","Carbon Dioxide","पौधे कौन सी गैस लेते हैं","कार्बन डाइऑक्साइड"],["force that pulls objects to Earth","Gravity","वस्तुओं को पृथ्वी की ओर खींचने वाला बल","गुरुत्वाकर्षण"],["instrument used to measure temperature","Thermometer","तापमान मापने का यंत्र","थर्मामीटर"]],
+animal:[["fastest land animal","Cheetah","सबसे तेज जमीन वाला जानवर","चीता"],["largest land animal","Elephant","सबसे बड़ा स्थलीय जानवर","हाथी"],["ship of the desert","Camel","रेगिस्तान का जहाज","ऊंट"],["largest animal on Earth","Blue Whale","पृथ्वी का सबसे बड़ा जानवर","ब्लू व्हेल"],["national animal of India","Tiger","भारत का राष्ट्रीय पशु","बाघ"]],
+math:[["smallest prime number","2","सबसे छोटी अभाज्य संख्या","2"],["number of degrees in a right angle","90","समकोण में कितने डिग्री होते हैं","90"],["number of sides in a triangle","3","त्रिभुज की भुजाएँ","3"],["square root of 64","8","64 का वर्गमूल","8"],["value of 12 x 12","144","12 x 12 का मान","144"]]
+};
+
+const fixed=[
+{en:"Which planet is known as the Red Planet?",hi:"किस ग्रह को लाल ग्रह कहा जाता है?",a:["Earth","Venus","Mars","Jupiter"],h:["पृथ्वी","शुक्र","मंगल","बृहस्पति"],c:2},
+{en:"How many continents are there?",hi:"दुनिया में कितने महाद्वीप हैं?",a:["5","6","7","8"],h:["5","6","7","8"],c:2},
+{en:"Who is known as the Father of Computers?",hi:"कंप्यूटर के जनक किसे कहा जाता है?",a:["Charles Babbage","Einstein","Newton","Bill Gates"],h:["चार्ल्स बैबेज","आइंस्टीन","न्यूटन","बिल गेट्स"],c:0}
 ];
 
-let quiz = [];
-let index = 0;
-let score = 0;
-let streak = 0;
-let lives = 3;
-let timeLeft = 15;
-let timer = null;
-let locked = false;
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function lang(){return document.getElementById("languageSelect").value}
+function cat(){return document.getElementById("categorySelect").value}
+function player(){return document.getElementById("playerName").value||"Player"}
 
-let best = parseInt(localStorage.getItem("gkQuizBest") || "0");
+let mode="endless",score=0,streak=0,lives=3,index=0,timeLeft=15,timer=null,locked=false,current=null,questionCount=0;
+let multiplayer=false,playerIndex=0,mpScores=[0,0],mpNames=["Player 1","Player 2"];
 
-const startScreen = document.getElementById("startScreen");
-const quizScreen = document.getElementById("quizScreen");
-const resultScreen = document.getElementById("resultScreen");
+const startScreen=document.getElementById("startScreen"),quizScreen=document.getElementById("quizScreen"),resultScreen=document.getElementById("resultScreen"),leaderboardScreen=document.getElementById("leaderboardScreen");
+const scoreEl=document.getElementById("score"),streakEl=document.getElementById("streak"),livesEl=document.getElementById("lives"),questionEl=document.getElementById("question"),answersEl=document.getElementById("answers"),feedbackEl=document.getElementById("feedback"),timerBar=document.getElementById("timerBar");
 
-const scoreEl = document.getElementById("score");
-const streakEl = document.getElementById("streak");
-const livesEl = document.getElementById("lives");
-const questionNumberEl = document.getElementById("questionNumber");
-const questionEl = document.getElementById("question");
-const answersEl = document.getElementById("answers");
-const feedbackEl = document.getElementById("feedback");
-const timerBar = document.getElementById("timerBar");
-
-function startGame(){
-    quiz = [...questions].sort(()=>Math.random()-0.5).slice(0,10);
-    index = 0;
-    score = 0;
-    streak = 0;
-    lives = 3;
-    locked = false;
-
-    startScreen.style.display = "none";
-    resultScreen.style.display = "none";
-    quizScreen.style.display = "block";
-
-    updateStats();
-    showQuestion();
+function makeGenerated(){
+let selected=cat();if(selected==="mixed")selected=pick(Object.keys(data));
+let item=pick(data[selected]),L=lang(),q,correct,pool;
+if(selected==="capital"){q=L==="hi"?`${item[2]} की राजधानी क्या है?`:`What is the capital of ${item[0]}?`;correct=L==="hi"?item[3]:item[1];pool=data[selected].map(x=>L==="hi"?x[3]:x[1])}
+if(selected==="currency"){q=L==="hi"?`${item[2]} की मुद्रा क्या है?`:`What is the currency of ${item[0]}?`;correct=L==="hi"?item[3]:item[1];pool=data[selected].map(x=>L==="hi"?x[3]:x[1])}
+if(selected==="science"||selected==="animal"||selected==="math"){q=L==="hi"?`${item[2]} क्या है?`:`What is the ${item[0]}?`;correct=L==="hi"?item[3]:item[1];pool=data[selected].map(x=>L==="hi"?x[3]:x[1])}
+let opts=shuffle([correct,...shuffle(pool.filter(x=>x!==correct)).slice(0,3)]);
+return {q:q,a:opts,c:opts.indexOf(correct)};
 }
 
-function showQuestion(){
-    clearInterval(timer);
-    locked = false;
-    timeLeft = 15;
-    timerBar.style.width = "100%";
-    feedbackEl.innerText = "";
-    feedbackEl.className = "";
+function makeFixed(){let f=pick(fixed),L=lang();return {q:L==="hi"?f.hi:f.en,a:L==="hi"?f.h:f.a,c:f.c}}
 
-    const item = quiz[index];
+function getQuestion(){return Math.random()<.25 && cat()==="mixed"?makeFixed():makeGenerated()}
 
-    questionNumberEl.innerText = "Question " + (index + 1) + "/10";
-    questionEl.innerText = item.q;
-    answersEl.innerHTML = "";
+function startGame(m){multiplayer=false;mode=m;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
+function startMultiplayer(){multiplayer=true;mode="classic";mpNames=[player(),"Player 2"];mpScores=[0,0];playerIndex=0;score=0;streak=0;lives=3;index=0;questionCount=0;hideAll();quizScreen.style.display="block";updateLabels();updateStats();showQuestion()}
 
-    item.a.forEach((answer,i)=>{
-        const btn = document.createElement("button");
-        btn.className = "answerBtn";
-        btn.innerText = answer;
-        btn.onclick = ()=>chooseAnswer(i,btn);
-        answersEl.appendChild(btn);
-    });
+function updateLabels(){let L=lang();document.getElementById("scoreLabel").innerText=L==="hi"?"स्कोर":"Score";document.getElementById("streakLabel").innerText=L==="hi"?"स्ट्रीक":"Streak";document.getElementById("livesLabel").innerText=L==="hi"?"लाइफ":"Lives"}
 
-    timer = setInterval(()=>{
-        timeLeft -= 0.2;
-        timerBar.style.width = Math.max(0,(timeLeft/15)*100) + "%";
+function showQuestion(){clearInterval(timer);locked=false;timeLeft=15;timerBar.style.width="100%";feedbackEl.innerText="";feedbackEl.className="";current=getQuestion();questionCount++;document.getElementById("questionNumber").innerText=(lang()==="hi"?"प्रश्न ":"Question ")+questionCount+(mode==="classic"?"/10":" • Endless");document.getElementById("playerTurn").innerText=multiplayer?("Turn: "+mpNames[playerIndex]+" | P1 "+mpScores[0]+" - P2 "+mpScores[1]):"";questionEl.innerText=current.q;answersEl.innerHTML="";current.a.forEach((ans,i)=>{let b=document.createElement("button");b.className="answerBtn";b.innerText=ans;b.onclick=()=>choose(i,b);answersEl.appendChild(b)});timer=setInterval(()=>{timeLeft-=.2;timerBar.style.width=Math.max(0,(timeLeft/15)*100)+"%";if(timeLeft<=0){clearInterval(timer);timeout()}},200)}
 
-        if(timeLeft <= 0){
-            clearInterval(timer);
-            timeoutAnswer();
-        }
-    },200);
-}
+function choose(i,btn){if(locked)return;locked=true;clearInterval(timer);let all=document.querySelectorAll(".answerBtn");if(i===current.c){streak++;let pts=100+(streak>=3?50:0)+Math.round(timeLeft*5);score+=pts;if(multiplayer)mpScores[playerIndex]+=pts;btn.classList.add("correct");feedbackEl.innerText=(lang()==="hi"?"सही! +":"Correct! +")+pts;feedbackEl.className="good";if(navigator.vibrate)navigator.vibrate(40)}else{lives--;streak=0;btn.classList.add("wrong");all[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"गलत!":"Wrong!";feedbackEl.className="bad";if(navigator.vibrate)navigator.vibrate([60,40,60])}updateStats();setTimeout(next,1100)}
+function timeout(){if(locked)return;locked=true;lives--;streak=0;document.querySelectorAll(".answerBtn")[current.c].classList.add("correct");feedbackEl.innerText=lang()==="hi"?"समय समाप्त!":"Time up!";feedbackEl.className="bad";updateStats();setTimeout(next,1100)}
 
-function chooseAnswer(choice,btn){
-    if(locked) return;
+function next(){if(multiplayer){playerIndex=playerIndex===0?1:0}if(lives<=0){endGame();return}if(mode==="classic"&&questionCount>=10){endGame();return}showQuestion()}
+function updateStats(){scoreEl.innerText=score;streakEl.innerText=streak;livesEl.innerText=lives}
+function endGame(){clearInterval(timer);hideAll();resultScreen.style.display="block";let final=multiplayer?Math.max(mpScores[0],mpScores[1]):score;let winner=multiplayer?(mpScores[0]>mpScores[1]?mpNames[0]:mpScores[1]>mpScores[0]?mpNames[1]:"Tie"):"";document.getElementById("resultTitle").innerText=multiplayer?("Winner: "+winner):(lang()==="hi"?"क्विज़ समाप्त!":"Quiz Complete!");document.getElementById("finalScore").innerText=multiplayer?("P1 "+mpScores[0]+" - P2 "+mpScores[1]):score;saveLeaderboard(player(),final);let best=Math.max(...getLeaderboard().map(x=>x.score),0);document.getElementById("highScore").innerText="Best: "+best;document.getElementById("rankText").innerText=final>=3000?"Quiz Legend":final>=1500?"GK Master":final>=700?"Smart Player":"Beginner"}
 
-    locked = true;
-    clearInterval(timer);
+function getLeaderboard(){return JSON.parse(localStorage.getItem("leaderboard")||"[]")}
+function saveLeaderboard(name,score){let list=getLeaderboard();list.push({name,score,date:new Date().toLocaleDateString()});list.sort((a,b)=>b.score-a.score);localStorage.setItem("leaderboard",JSON.stringify(list.slice(0,10)))}
+function showLeaderboard(){hideAll();leaderboardScreen.style.display="block";let list=getLeaderboard();document.getElementById("leaderList").innerHTML=list.length?list.map((x,i)=>`<div class="leaderItem"><span>${i+1}. ${x.name}</span><b>${x.score}</b></div>`).join(""):"No scores yet."}
+function clearLeaderboard(){localStorage.removeItem("leaderboard");showLeaderboard()}
 
-    const item = quiz[index];
-    const allBtns = document.querySelectorAll(".answerBtn");
-
-    if(choice === item.c){
-        streak++;
-        const bonus = streak >= 3 ? 50 : 0;
-        const timeBonus = Math.round(timeLeft * 5);
-        const points = 100 + bonus + timeBonus;
-        score += points;
-
-        btn.classList.add("correct");
-        feedbackEl.innerText = "Correct! +" + points;
-        feedbackEl.className = "good";
-
-        if(streak === 3){
-            showToast("🔥 Streak Bonus!");
-        }
-
-        if(navigator.vibrate){
-            navigator.vibrate(40);
-        }
-    }else{
-        lives--;
-        streak = 0;
-        btn.classList.add("wrong");
-        allBtns[item.c].classList.add("correct");
-        feedbackEl.innerText = "Wrong!";
-        feedbackEl.className = "bad";
-
-        if(navigator.vibrate){
-            navigator.vibrate([60,40,60]);
-        }
-    }
-
-    updateStats();
-
-    setTimeout(nextQuestion,1200);
-}
-
-function timeoutAnswer(){
-    if(locked) return;
-
-    locked = true;
-    lives--;
-    streak = 0;
-
-    const item = quiz[index];
-    const allBtns = document.querySelectorAll(".answerBtn");
-    allBtns[item.c].classList.add("correct");
-
-    feedbackEl.innerText = "Time up!";
-    feedbackEl.className = "bad";
-
-    updateStats();
-
-    setTimeout(nextQuestion,1200);
-}
-
-function nextQuestion(){
-    if(lives <= 0){
-        endGame();
-        return;
-    }
-
-    index++;
-
-    if(index >= quiz.length){
-        endGame();
-        return;
-    }
-
-    showQuestion();
-}
-
-function updateStats(){
-    scoreEl.innerText = score;
-    streakEl.innerText = streak;
-    livesEl.innerText = lives;
-}
-
-function endGame(){
-    clearInterval(timer);
-
-    quizScreen.style.display = "none";
-    resultScreen.style.display = "block";
-
-    if(score > best){
-        best = score;
-        localStorage.setItem("gkQuizBest",best);
-        showToast("🏆 New Best!");
-    }
-
-    document.getElementById("finalScore").innerText = score;
-    document.getElementById("highScore").innerText = "Best: " + best;
-
-    let rank = "Beginner";
-    if(score >= 700) rank = "Smart Player";
-    if(score >= 1000) rank = "GK Master";
-    if(score >= 1300) rank = "Quiz Legend";
-
-    document.getElementById("rankText").innerText = rank;
-}
-
-function resetBest(){
-    best = 0;
-    localStorage.setItem("gkQuizBest",0);
-    document.getElementById("highScore").innerText = "Best: 0";
-}
-
-function showToast(text){
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.innerText = text;
-    document.body.appendChild(toast);
-
-    setTimeout(()=>{
-        toast.remove();
-    },1800);
-}
+function hideAll(){startScreen.style.display="none";quizScreen.style.display="none";resultScreen.style.display="none";leaderboardScreen.style.display="none"}
+function showStart(){hideAll();startScreen.style.display="block"}
+function toggleMusic(){if(bgMusic.paused){bgMusic.play().then(()=>musicStarted=true).catch(()=>{});}else{bgMusic.pause()}}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)bgMusic.pause();else if(musicStarted)bgMusic.play().catch(()=>{})});
 </script>
 </body>
 </html>
