@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>GK Quiz Rush</title>
+<title>GK Quiz Rush Fixed</title>
 <style>
 :root{--gold:#ffd54a;--orange:#ff9800;--cyan:#00e5ff;--blue:#064fb3;--dark:#020816}
 *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;-webkit-tap-highlight-color:transparent}
@@ -386,7 +386,6 @@ function showAchievements(){
 }
 
 function spinWheel(){let r=[25,50,75,100,150][Math.floor(Math.random()*5)];coins+=r;localStorage.setItem("coins",coins);updateMeta();toast("🎡 +"+r+" Coins")}
-</button>`).join(""); show("avatarShop")}
 function clearBoard(){localStorage.removeItem("leaderboard");showLeaderboard()}
 
 let selectedAvatar = localStorage.getItem("selectedAvatar") || "🧠";
@@ -446,6 +445,7 @@ function useExtraTime(){
   toast("+10 seconds");
 }
 
+
 function showAvatar(){
   const avatars=["🧠","🚀","👑","🔥","💎","🏆","🦁","⚡","🌟","🎯"];
   $("avatarList").innerHTML = avatars.map(a =>
@@ -463,6 +463,7 @@ function showAvatar(){
 }
 
 function dailyReward(){
+
   const today = new Date().toDateString();
   if(lastDaily === today){
     toast("Already claimed today");
@@ -511,6 +512,13 @@ function bind(){
  updateMeta();
 }
 window.addEventListener("DOMContentLoaded",bind);
+
+window.addEventListener("error", function(e){
+  try{
+    console.log("GK Quiz JS Error:", e.message, e.filename, e.lineno);
+  }catch(err){}
+});
+
 </script>
 </body>
 </html>
