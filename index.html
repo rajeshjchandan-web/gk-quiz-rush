@@ -227,6 +227,34 @@ input,select{font-size:clamp(14px,2vw,16px)!important}
 .card{padding:12px!important}
 #menu{gap:8px}
 
+
+.logoMain{
+animation:glowPulse 2s infinite alternate!important;
+}
+@keyframes glowPulse{
+from{text-shadow:0 0 10px #ffd54a,0 0 20px #ffd54a}
+to{text-shadow:0 0 20px #ffd54a,0 0 40px #00e5ff}
+}
+
+
+/* ===== PREMIUM V6 SYSTEMS ===== */
+.avatarBtn,.themeBtn{
+    font-size:22px!important;
+    padding:12px!important;
+}
+.v6Selected{
+    outline:2px solid var(--gold);
+    box-shadow:0 0 18px var(--gold)!important;
+}
+.levelFlash{
+    animation:levelFlash 1.2s ease;
+}
+@keyframes levelFlash{
+    0%{transform:scale(1);filter:brightness(1)}
+    50%{transform:scale(1.05);filter:brightness(1.8)}
+    100%{transform:scale(1);filter:brightness(1)}
+}
+
 </style>
 </head>
 <body>
@@ -271,11 +299,25 @@ input,select{font-size:clamp(14px,2vw,16px)!important}
 <button class="btnBlue" onclick="toggleMusic()">🎵 Sound</button>
 <div id="levelText">Level 1 • XP 0/500</div><div class="xpWrap"><div id="xpBar"></div></div>
 <div class="badge">Offline • Free backend • Play Store ready</div><div class="card" style="margin-top:12px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div class="stat"><b>Coins</b><span id="coins">0</span></div><div class="stat"><b>Rank</b><span id="rankMini">Rookie</span></div><div class="stat"><b>Daily</b><span id="dailyStreak">1</span></div></div><div class="badge">🎯 Daily: Answer 10 questions</div></div>
+
+<div class="card" id="premiumHub" style="margin-top:6px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<button class="btnBlue" onclick="dailyReward()">🎁 Daily Reward</button>
+<button class="btnBlue" onclick="spinWheel()">🎡 Lucky Spin</button>
+<button class="btnBlue" onclick="openAvatarShop()">👤 Avatar</button>
+<button class="btnBlue" onclick="openPowerups()">⚡ Powerups</button>
+</div>
 </div>
 
+</div>
+
+<div id="avatarShop" class="card" style="display:none"><h2>👤 Avatar Shop</h2><div id="avatarList"></div><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
+<div id="powerupShop" class="card" style="display:none"><h2>⚡ Powerups</h2><div class="item"><span>50/50 Remove Options</span><button class="btnGold" onclick="buyPowerup('fifty')">Buy 80</button></div><div class="item"><span>Skip Question</span><button class="btnGold" onclick="buyPowerup('skip')">Buy 60</button></div><div class="item"><span>Extra Time</span><button class="btnGold" onclick="buyPowerup('time')">Buy 70</button></div><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
+<div id="themeShop" class="card" style="display:none"><h2>🎨 Theme Shop</h2><div id="themeList"></div><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
+<div id="missionScreen" class="card" style="display:none"><h2>🎯 Missions</h2><div id="missionList"></div><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
 <div id="quiz">
 <div class="card stats"><div class="stat"><b id="scoreLabel">Score</b><span id="score">0</span></div><div class="stat"><b id="streakLabel">Streak</b><span id="streak">0</span></div><div class="stat"><b id="livesLabel">Lives</b><span id="lives">3</span></div></div>
-<div class="card"><div id="qnum">Question 1</div><div id="timerWrap"><div id="timerBar"></div></div><div id="question">Question text</div><div id="answers"></div><div id="feedback"></div></div>
+<div class="card"><div id="qnum">Question 1</div><div id="timerWrap"><div id="timerBar"></div></div><div id="question">Question text</div><div id="answers"></div><div class="grid2"><button class="btnBlue" onclick="usePowerup('fifty')">50/50</button><button class="btnBlue" onclick="usePowerup('skip')">Skip</button><button class="btnBlue" onclick="usePowerup('time')">+Time</button><button class="btnBlue" onclick="showToast('Powerups saved locally')">Bag</button></div><div id="feedback"></div></div>
 </div>
 
 <div id="result" class="card"><div class="hero">🏆</div><h2 id="resultTitle">Quiz Complete</h2><div style="font-size:42px;color:var(--cyan);font-weight:900" id="finalScore">0</div><div id="rank" class="badge">Rank</div><button class="btnGold" onclick="startGame('endless')">Play Again</button><button class="btnBlue" onclick="showMenu()">Main Menu</button></div>
@@ -348,7 +390,11 @@ function updateLabels(){document.getElementById("scoreLabel").innerText=tr("scor
 function updateXP(){let lvl=Math.floor(xp/500)+1,cur=xp%500;document.getElementById("levelText").innerText=`Level ${lvl} • XP ${cur}/500`;document.getElementById("xpBar").style.width=(cur/500*100)+"%"}
 function unlock(id){if(unlocked.includes(id))return;let a=ach.find(x=>x[0]===id);if(!a)return;unlocked.push(id);localStorage.setItem("quizAchievements",JSON.stringify(unlocked));xp+=a[3];localStorage.setItem("playerXP",xp);updateXP();showToast("🏅 "+a[1]+" +"+a[3]+" XP")}
 function makeQuestion(){let cat=category(),L=lang();if(cat==="mixed")cat=pick(["geopolitics","bollywood","capital","science","math","sports","technology","planets"]);if(baseQuestions[cat]){let item=pickNoRepeat(baseQuestions[cat],cat+"_"+L),pair=item[L]||item.en,correct=pair[1][0],answers=shuffle(pair[1]);return{q:pair[0],a:answers,c:answers.indexOf(correct)}}let s=simpleCategories[cat]||simpleCategories.science;let answers=shuffle(s.slice(1));return{q:s[0],a:answers,c:answers.indexOf(s[1])}}
-function hideAll(){menu.style.display="none";quiz.style.display="none";result.style.display="none";leaderboard.style.display="none";achievements.style.display="none"}
+function hideAll(){menu.style.display="none";quiz.style.display="none";result.style.display="none";leaderboard.style.display="none";achievements.style.display="none";
+    const avatarShop=document.getElementById("avatarShop"); if(avatarShop)avatarShop.style.display="none";
+    const powerupShop=document.getElementById("powerupShop"); if(powerupShop)powerupShop.style.display="none";
+    const themeShop=document.getElementById("themeShop"); if(themeShop)themeShop.style.display="none";
+    const missionScreen=document.getElementById("missionScreen"); if(missionScreen)missionScreen.style.display="none"}
 function showMenu(){hideAll();menu.style.display="block";updateXP()}
 function startGame(m){initAudio();startBackgroundMusic();unlock("first");if(category()==="geopolitics")unlock("geo");if(category()==="bollywood")unlock("bolly");mode=m;score=0;streak=0;lives=3;qCount=0;hideAll();quiz.style.display="block";updateLabels();updateStats();nextQuestion()}
 function nextQuestion(){if(lives<=0||(mode==="classic"&&qCount>=10)){endGame();return}locked=false;qCount++;current=makeQuestion();document.getElementById("qnum").innerText=tr("q")+qCount+(mode==="classic"?"/10":"");document.getElementById("question").innerText=current.q;document.getElementById("feedback").innerText="";document.getElementById("feedback").className="";let ans=document.getElementById("answers");ans.innerHTML="";current.a.forEach((a,i)=>{let b=document.createElement("button");b.className="answer";b.innerText=String.fromCharCode(65+i)+". "+a;b.onclick=()=>choose(i,b);ans.appendChild(b)});startTimer()}
@@ -537,6 +583,206 @@ choose=function(i,btn){
  },50);
 }
 setInterval(updateMeta,1000);
+
+
+function dailyReward(){
+ let last=localStorage.getItem('dailyRewardDate');
+ let today=new Date().toDateString();
+ if(last===today){showToast('⏳ Reward already claimed today');return;}
+ let reward=100;
+ coins+=reward;
+ localStorage.setItem('coins',coins);
+ localStorage.setItem('dailyRewardDate',today);
+ updateMeta();
+ showToast('🎁 +'+reward+' Coins');
+}
+
+function spinWheel(){
+ const rewards=[25,50,75,100,150,200];
+ const reward=rewards[Math.floor(Math.random()*rewards.length)];
+ coins+=reward;
+ localStorage.setItem('coins',coins);
+ updateMeta();
+ showToast('🎡 Won '+reward+' Coins');
+}
+
+
+// ===== PREMIUM V6 FEATURES =====
+let selectedAvatar = localStorage.getItem("selectedAvatar") || "🧠";
+let selectedTheme = localStorage.getItem("selectedTheme") || "default";
+let powerups = JSON.parse(localStorage.getItem("powerups") || '{"fifty":1,"skip":1,"time":1}');
+let dailyStreakV6 = parseInt(localStorage.getItem("dailyStreakV6") || "0");
+let questionsToday = parseInt(localStorage.getItem("questionsToday") || "0");
+let correctToday = parseInt(localStorage.getItem("correctToday") || "0");
+let lastMissionDate = localStorage.getItem("missionDate") || "";
+
+const avatars = ["🧠","🚀","👑","⚡","🔥","💎","🦁","🧙"];
+const themes = [
+    {id:"default",name:"Blue Gold",bg:"linear-gradient(160deg,#020714,#071633 58%,#020714)"},
+    {id:"space",name:"Space",bg:"linear-gradient(160deg,#050016,#11115a,#000)"},
+    {id:"emerald",name:"Emerald",bg:"linear-gradient(160deg,#001b16,#064d3b,#020714)"},
+    {id:"royal",name:"Royal",bg:"linear-gradient(160deg,#120022,#25136b,#020714)"}
+];
+
+function resetDailyCountersIfNeeded(){
+    const today = new Date().toDateString();
+    if(lastMissionDate !== today){
+        questionsToday = 0;
+        correctToday = 0;
+        localStorage.setItem("questionsToday","0");
+        localStorage.setItem("correctToday","0");
+        localStorage.setItem("missionDate",today);
+        lastMissionDate = today;
+    }
+}
+
+function applyTheme(){
+    const theme = themes.find(t=>t.id===selectedTheme) || themes[0];
+    document.body.style.background = "radial-gradient(circle at 20% 8%,rgba(0,229,255,.22),transparent 28%),radial-gradient(circle at 85% 5%,rgba(255,213,74,.18),transparent 26%)," + theme.bg;
+}
+
+function openAvatarShop(){
+    hideAll();
+    document.getElementById("avatarShop").style.display="block";
+    document.getElementById("avatarList").innerHTML = avatars.map(a => `
+        <button class="btnBlue avatarBtn ${a===selectedAvatar?'v6Selected':''}" onclick="selectAvatar('${a}')">${a}</button>
+    `).join("");
+}
+
+function selectAvatar(a){
+    selectedAvatar = a;
+    localStorage.setItem("selectedAvatar",a);
+    showToast(a + " Avatar selected");
+    openAvatarShop();
+}
+
+function openThemeShop(){
+    hideAll();
+    document.getElementById("themeShop").style.display="block";
+    document.getElementById("themeList").innerHTML = themes.map(t => `
+        <button class="btnBlue themeBtn ${t.id===selectedTheme?'v6Selected':''}" onclick="selectTheme('${t.id}')">🎨 ${t.name}</button>
+    `).join("");
+}
+
+function selectTheme(id){
+    selectedTheme = id;
+    localStorage.setItem("selectedTheme",id);
+    applyTheme();
+    showToast("Theme applied");
+    openThemeShop();
+}
+
+function openPowerups(){
+    hideAll();
+    document.getElementById("powerupShop").style.display="block";
+}
+
+function buyPowerup(type){
+    const cost = type==="fifty"?80:type==="skip"?60:70;
+    if(coins < cost){showToast("Need more coins");return;}
+    coins -= cost;
+    powerups[type] = (powerups[type]||0)+1;
+    localStorage.setItem("coins",coins);
+    localStorage.setItem("powerups",JSON.stringify(powerups));
+    updateMeta();
+    showToast("Powerup added");
+}
+
+function usePowerup(type){
+    if(!powerups[type] || powerups[type]<=0){showToast("No powerup left");return;}
+    powerups[type]--;
+    localStorage.setItem("powerups",JSON.stringify(powerups));
+
+    if(type==="fifty"){
+        const buttons=[...document.querySelectorAll(".answer")];
+        let removed=0;
+        buttons.forEach((b,i)=>{
+            if(i!==current.c && removed<2){
+                b.style.visibility="hidden";
+                removed++;
+            }
+        });
+        showToast("50/50 used");
+    }
+
+    if(type==="skip"){
+        showToast("Skipped");
+        setTimeout(nextQuestion,300);
+    }
+
+    if(type==="time"){
+        timeLeft += 8;
+        showToast("+8 seconds");
+    }
+}
+
+function openMissions(){
+    resetDailyCountersIfNeeded();
+    hideAll();
+    document.getElementById("missionScreen").style.display="block";
+    const qDone = Math.min(questionsToday,10);
+    const cDone = Math.min(correctToday,5);
+    document.getElementById("missionList").innerHTML = `
+        <div class="item"><span>Answer 10 questions</span><b>${qDone}/10</b></div>
+        <div class="item"><span>Get 5 correct answers</span><b>${cDone}/5</b></div>
+        <div class="item"><span>Daily streak</span><b>${dailyStreakV6} days</b></div>
+    `;
+}
+
+function rewardMissionProgress(correct){
+    resetDailyCountersIfNeeded();
+    questionsToday++;
+    if(correct) correctToday++;
+    localStorage.setItem("questionsToday",questionsToday);
+    localStorage.setItem("correctToday",correctToday);
+    if(questionsToday===10){coins+=100;localStorage.setItem("coins",coins);showToast("Mission +100 coins");}
+    if(correctToday===5){coins+=150;localStorage.setItem("coins",coins);showToast("Accuracy Mission +150 coins");}
+    updateMeta();
+}
+
+// Wrap original choose to track missions
+if(typeof originalChooseV6 === "undefined"){
+    var originalChooseV6 = choose;
+    choose = function(i,btn){
+        const wasCorrect = current && i === current.c;
+        originalChooseV6(i,btn);
+        rewardMissionProgress(wasCorrect);
+    }
+}
+
+const oldDailyRewardV6 = typeof dailyReward === "function" ? dailyReward : null;
+dailyReward = function(){
+    let last=localStorage.getItem('dailyRewardDate');
+    let today=new Date().toDateString();
+    if(last===today){showToast('⏳ Reward already claimed today');return;}
+    dailyStreakV6++;
+    localStorage.setItem("dailyStreakV6",dailyStreakV6);
+    let reward=100 + Math.min(dailyStreakV6*20,300);
+    coins+=reward;
+    localStorage.setItem('coins',coins);
+    localStorage.setItem('dailyRewardDate',today);
+    updateMeta();
+    showToast('🎁 Streak '+dailyStreakV6+' • +'+reward+' Coins');
+}
+
+function levelUpEffect(){
+    const game=document.getElementById("game");
+    game.classList.add("levelFlash");
+    setTimeout(()=>game.classList.remove("levelFlash"),1200);
+}
+
+let lastLevelV6 = Math.floor(xp/500)+1;
+setInterval(()=>{
+    const nowLevel = Math.floor(xp/500)+1;
+    if(nowLevel>lastLevelV6){
+        lastLevelV6=nowLevel;
+        levelUpEffect();
+        showToast("⬆ Level Up!");
+    }
+},1200);
+
+applyTheme();
+resetDailyCountersIfNeeded();
 
 </script>
 </body>
