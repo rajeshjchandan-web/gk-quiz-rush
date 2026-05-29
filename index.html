@@ -72,6 +72,20 @@ button:active{transform:scale(.97)}
  .triple button{min-height:31px;font-size:9px}
  .badge{padding:5px;font-size:10px}
 }
+
+.avatarPick{
+  font-size:28px!important;
+  min-height:54px!important;
+}
+#avatarList{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+#powerupBag{
+  font-size:13px!important;
+}
+
 </style>
 </head>
 <body>
@@ -96,14 +110,27 @@ button:active{transform:scale(.97)}
 
   <div id="quiz">
     <div class="card stats3"><div class="stat"><b>Score</b><span id="score">0</span></div><div class="stat"><b>Streak</b><span id="streak">0</span></div><div class="stat"><b>Lives</b><span id="lives">3</span></div></div>
-    <div class="card"><div id="qnum">Question 1</div><div id="timerWrap"><div id="timerBar"></div></div><div id="question"></div><div id="answers"></div><div id="feedback"></div><button class="btnBlue" id="quitBtn">Main Menu</button></div>
+    <div class="card"><div id="qnum">Question 1</div><div id="timerWrap"><div id="timerBar"></div></div><div id="question"></div><div id="answers"></div>
+<div class="triple">
+  <button class="btnBlue" id="useFiftyBtn">50/50</button>
+  <button class="btnBlue" id="useSkipBtn">Skip</button>
+  <button class="btnBlue" id="useTimeBtn">+10s</button>
+</div>
+<div id="feedback"></div><button class="btnBlue" id="quitBtn">Main Menu</button></div>
   </div>
 
   <div id="result" class="card"><h2>🏆 Quiz Complete</h2><div id="finalScore" style="font-size:42px;color:var(--cyan);font-weight:1000">0</div><div id="rank" class="badge">Rank</div><button class="btnGold" id="againBtn">Play Again</button><button class="btnBlue" id="menuBtn1">Main Menu</button></div>
   <div id="leaderboard" class="card"><h2>🏆 Board</h2><div id="leaderList"></div><button class="btnBlue" id="clearBoardBtn">Clear</button><button class="btnGold" id="menuBtn2">Main Menu</button></div>
   <div id="achievements" class="card"><h2>🏅 Badges</h2><div id="achievementList"></div><button class="btnGold" id="menuBtn3">Main Menu</button></div>
   <div id="avatarShop" class="card"><h2>👤 Avatar</h2><div id="avatarList"></div><button class="btnGold" id="menuBtn4">Main Menu</button></div>
-  <div id="powerupShop" class="card"><h2>⚡ Powerups</h2><div class="item"><span>50/50</span><b>Coming soon</b></div><div class="item"><span>Skip</span><b>Coming soon</b></div><button class="btnGold" id="menuBtn5">Main Menu</button></div>
+  <div id="powerupShop" class="card">
+  <h2>⚡ Powerups</h2>
+  <div class="item"><span>50/50 Remove 2 wrong answers</span><button class="btnGold" id="buyFiftyBtn">Buy 80</button></div>
+  <div class="item"><span>Skip Question</span><button class="btnGold" id="buySkipBtn">Buy 60</button></div>
+  <div class="item"><span>Extra Time +10 seconds</span><button class="btnGold" id="buyTimeBtn">Buy 70</button></div>
+  <div class="badge" id="powerupBag">50/50: 0 • Skip: 0 • Time: 0</div>
+  <button class="btnGold" id="menuBtn5">Main Menu</button>
+</div>
 </div>
 
 <script>
@@ -159,7 +186,7 @@ function updateMeta(){
  $("levelText").textContent=`Level ${level} • XP ${xpPart}/500`;
  $("xpBar").style.width=(xpPart/500*100)+"%";
  let rank="Rookie"; if(xp>500)rank="Scholar"; if(xp>1500)rank="Expert"; if(xp>3000)rank="Master"; if(xp>6000)rank="Legend";
- $("rankMini").textContent=rank;
+ $("rankMini").textContent=rank; if($("dailyStreak")) $("dailyStreak").textContent=dailyStreak;
 }
 function normalizeQuestion(raw){
  if(!raw)return null;
@@ -258,10 +285,104 @@ function showAchievements(){
  ].map(a=>`<div class="item"><span>🏅 ${a[0]}</span><b>${a[1]}</b></div>`).join("");
  show("achievements");
 }
-function dailyReward(){coins+=100;localStorage.setItem("coins",coins);updateMeta();toast("🎁 +100 Coins")}
+
 function spinWheel(){let r=[25,50,75,100,150][Math.floor(Math.random()*5)];coins+=r;localStorage.setItem("coins",coins);updateMeta();toast("🎡 +"+r+" Coins")}
-function showAvatar(){ $("avatarList").innerHTML=["🧠","🚀","👑","🔥","💎","🏆"].map(a=>`<button class="btnBlue">${a}</button>`).join(""); show("avatarShop")}
+</button>`).join(""); show("avatarShop")}
 function clearBoard(){localStorage.removeItem("leaderboard");showLeaderboard()}
+
+let selectedAvatar = localStorage.getItem("selectedAvatar") || "🧠";
+let powerups = JSON.parse(localStorage.getItem("powerups") || '{"fifty":1,"skip":1,"time":1}');
+let lastDaily = localStorage.getItem("lastDailyReward") || "";
+let dailyStreak = parseInt(localStorage.getItem("dailyStreak") || "1");
+
+function savePowerups(){
+  localStorage.setItem("powerups", JSON.stringify(powerups));
+  updatePowerupBag();
+}
+
+function updatePowerupBag(){
+  let bag = $("powerupBag");
+  if(bag) bag.textContent = `50/50: ${powerups.fifty||0} • Skip: ${powerups.skip||0} • Time: ${powerups.time||0}`;
+}
+
+function buyPowerup(type,cost){
+  if(coins < cost){ toast("Need more coins"); return; }
+  coins -= cost;
+  powerups[type] = (powerups[type]||0) + 1;
+  localStorage.setItem("coins", coins);
+  savePowerups();
+  updateMeta();
+  toast("⚡ Powerup added");
+}
+
+function useFifty(){
+  if(!current){toast("Start quiz first");return;}
+  if((powerups.fifty||0)<=0){toast("No 50/50 left");return;}
+  powerups.fifty--; savePowerups();
+  let buttons=[...document.querySelectorAll(".answer")];
+  let removed=0;
+  buttons.forEach(b=>{
+    if(!b.classList.contains("correct") && removed<2){
+      // Since correct button is not marked before answer, remove first 2 buttons that do not match correct answer text.
+      if(current.a[0] !== b.textContent){
+        b.style.visibility="hidden"; removed++;
+      }
+    }
+  });
+  toast("50/50 used");
+}
+
+function useSkip(){
+  if((powerups.skip||0)<=0){toast("No Skip left");return;}
+  powerups.skip--; savePowerups();
+  toast("Skipped");
+  setTimeout(nextQuestion,350);
+}
+
+function useExtraTime(){
+  if((powerups.time||0)<=0){toast("No Extra Time left");return;}
+  powerups.time--; savePowerups();
+  timeLeft += 10;
+  if(timeLeft>30) timeLeft=30;
+  toast("+10 seconds");
+}
+
+function showAvatar(){
+  const avatars=["🧠","🚀","👑","🔥","💎","🏆","🦁","⚡","🌟","🎯"];
+  $("avatarList").innerHTML = avatars.map(a =>
+    `<button class="btnBlue avatarPick" data-avatar="${a}" style="${a===selectedAvatar?'box-shadow:0 0 18px #ffd54a;border-color:#ffd54a':''}">${a}</button>`
+  ).join("");
+  show("avatarShop");
+  document.querySelectorAll(".avatarPick").forEach(btn=>{
+    btn.onclick=()=>{
+      selectedAvatar=btn.dataset.avatar;
+      localStorage.setItem("selectedAvatar",selectedAvatar);
+      toast(selectedAvatar+" Avatar selected");
+      showAvatar();
+    };
+  });
+}
+
+function dailyReward(){
+  const today = new Date().toDateString();
+  if(lastDaily === today){
+    toast("Already claimed today");
+    return;
+  }
+  let yesterday = new Date(Date.now()-86400000).toDateString();
+  if(lastDaily === yesterday) dailyStreak++;
+  else dailyStreak = 1;
+
+  let reward = 100 + Math.min(dailyStreak*25, 250);
+  coins += reward;
+  lastDaily = today;
+  localStorage.setItem("lastDailyReward", lastDaily);
+  localStorage.setItem("dailyStreak", dailyStreak);
+  localStorage.setItem("coins", coins);
+  updateMeta();
+  toast(`🎁 Day ${dailyStreak}: +${reward} coins`);
+}
+
 function bind(){
  document.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{initAudio();clickSound()}));
  $("playBtn").onclick=()=>startGame("endless");
@@ -272,13 +393,22 @@ function bind(){
  $("dailyBtn").onclick=dailyReward;
  $("spinBtn").onclick=spinWheel;
  $("avatarBtn").onclick=showAvatar;
- $("powerBtn").onclick=()=>show("powerupShop");
+ $("powerBtn").onclick=()=>{updatePowerupBag();show("powerupShop")};
  $("quitBtn").onclick=() => {clearInterval(timer);show("menu")};
  $("againBtn").onclick=()=>startGame("endless");
  ["menuBtn1","menuBtn2","menuBtn3","menuBtn4","menuBtn5"].forEach(id=>$(id).onclick=()=>show("menu"));
  $("clearBoardBtn").onclick=clearBoard;
  document.addEventListener("touchstart",initAudio,{once:true});
  document.addEventListener("click",initAudio,{once:true});
+
+ if($("buyFiftyBtn")) $("buyFiftyBtn").onclick=()=>buyPowerup("fifty",80);
+ if($("buySkipBtn")) $("buySkipBtn").onclick=()=>buyPowerup("skip",60);
+ if($("buyTimeBtn")) $("buyTimeBtn").onclick=()=>buyPowerup("time",70);
+ if($("useFiftyBtn")) $("useFiftyBtn").onclick=useFifty;
+ if($("useSkipBtn")) $("useSkipBtn").onclick=useSkip;
+ if($("useTimeBtn")) $("useTimeBtn").onclick=useExtraTime;
+ updatePowerupBag();
+
  updateMeta();
 }
 window.addEventListener("DOMContentLoaded",bind);
