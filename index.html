@@ -464,212 +464,203 @@ button{
   .xpWrap{height:6px!important;}
 }
 
-/* ===== FINAL PLAY STORE POLISH: SPLASH + LOADING + ICON ===== */
-#splashScreen{
-    position:fixed;
-    inset:0;
-    z-index:99999;
-    background:
-        radial-gradient(circle at 50% 20%,rgba(255,213,74,.25),transparent 30%),
-        radial-gradient(circle at 50% 70%,rgba(0,229,255,.18),transparent 35%),
-        linear-gradient(160deg,#020714,#071633,#020714);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    color:white;
-    transition:opacity .6s ease, visibility .6s ease;
-}
-
-#splashScreen.hideSplash{
-    opacity:0;
-    visibility:hidden;
-}
-
-.splashIcon{
-    width:112px;
-    height:112px;
-    border-radius:28px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:58px;
-    background:radial-gradient(circle at 50% 25%,#fff6a6,#ffb300 36%,#071633 38%);
-    border:3px solid var(--gold);
-    box-shadow:0 0 35px var(--gold), inset 0 0 24px rgba(0,0,0,.35);
-    animation:splashPulse 1.2s infinite alternate;
-}
-
-@keyframes splashPulse{
-    from{transform:scale(1);filter:brightness(1)}
-    to{transform:scale(1.06);filter:brightness(1.4)}
-}
-
-.splashTitle{
-    margin-top:18px;
-    font-size:42px;
-    font-weight:900;
-    color:var(--gold);
-    text-shadow:0 0 18px var(--gold),0 4px 0 #8b5200;
-}
-
-.splashSub{
-    font-size:28px;
-    font-weight:900;
-    text-shadow:0 0 16px var(--cyan);
-}
-
-.loadingText{
-    margin-top:22px;
-    color:#cfe8ff;
-    font-weight:700;
-    font-size:14px;
-}
-
-.loadingBar{
-    margin-top:12px;
-    width:240px;
-    height:12px;
-    background:#061021;
-    border:1px solid rgba(0,229,255,.35);
-    border-radius:30px;
-    overflow:hidden;
-}
-
-#loadingFill{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,var(--cyan),var(--gold));
-    animation:loadFill 1.8s ease forwards;
-}
-
-@keyframes loadFill{
-    to{width:100%}
-}
-
-.appIconMini{
-    width:42px;
-    height:42px;
-    border-radius:13px;
-    margin:0 auto 4px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:24px;
-    background:radial-gradient(circle at 50% 25%,#fff6a6,#ffb300 36%,#071633 38%);
-    border:2px solid var(--gold);
-    box-shadow:0 0 18px var(--gold);
-}
-
-@media(max-height:720px){
-    .appIconMini{display:none!important;}
-}
-
-
-/* APK NAVIGATION BAR SAFE FIX */
-html,body{
+/* ===== APK BALANCED FIT FIX: LESS SCROLL + SAFE BOTTOM ===== */
+html, body{
   min-height:100%;
   height:auto!important;
   overflow-x:hidden!important;
   overflow-y:auto!important;
 }
+
 body{
-  padding-bottom:90px!important;
+  padding:4px 5px 22px 5px!important;
 }
+
 #game{
-  height:auto!important;
+  max-width:500px!important;
   min-height:auto!important;
-  padding-bottom:100px!important;
+  height:auto!important;
+  padding-bottom:28px!important;
 }
-#menu{
-  margin-bottom:95px!important;
+
+.logo{
+  margin:2px auto 3px!important;
 }
+
+.logoMain{
+  font-size:26px!important;
+  line-height:1!important;
+}
+
+.logoSub{
+  font-size:15px!important;
+  line-height:1!important;
+}
+
+.tag{
+  display:none!important;
+}
+
+.card{
+  margin-top:4px!important;
+  padding:7px!important;
+  border-radius:17px!important;
+}
+
+#menu .hero,
+.appIconMini{
+  width:42px!important;
+  height:42px!important;
+  font-size:22px!important;
+  margin:0 auto 2px!important;
+  border-radius:13px!important;
+}
+
+#menu h2{
+  font-size:16px!important;
+  margin:1px 0 3px 0!important;
+}
+
+#menu .small{
+  display:none!important;
+}
+
+input,select{
+  padding:7px!important;
+  margin-top:3px!important;
+  font-size:12px!important;
+  border-radius:10px!important;
+}
+
+button{
+  padding:7px!important;
+  margin-top:3px!important;
+  font-size:11px!important;
+  border-radius:10px!important;
+  line-height:1.05!important;
+}
+
+.btnGold{
+  font-size:13px!important;
+}
+
+.grid2{
+  gap:5px!important;
+}
+
+#levelText{
+  font-size:10px!important;
+  margin-top:3px!important;
+}
+
+.xpWrap{
+  height:5px!important;
+  margin-top:2px!important;
+}
+
+.badge{
+  padding:5px!important;
+  margin-top:3px!important;
+  font-size:9px!important;
+  border-radius:10px!important;
+}
+
+#menu .card{
+  padding:5px!important;
+  margin-top:3px!important;
+}
+
+#menu .stat{
+  padding:3px 1px!important;
+  border-radius:9px!important;
+}
+
+#menu .stat b{
+  font-size:8px!important;
+}
+
+#menu .stat span{
+  font-size:12px!important;
+  margin-top:0!important;
+}
+
 #premiumHub{
-  margin-bottom:100px!important;
+  padding:5px!important;
+  margin-top:4px!important;
+  margin-bottom:18px!important;
 }
-@media(max-width:480px){
-  body{
-    padding:5px 5px 105px 5px!important;
-  }
-  #game{
-    padding-bottom:115px!important;
-  }
-  .logoMain{font-size:26px!important;}
-  .logoSub{font-size:15px!important;}
-  .tag{font-size:10px!important;}
-  #menu .hero,.appIconMini{
-    width:46px!important;
-    height:46px!important;
-    font-size:24px!important;
-    margin-bottom:2px!important;
-  }
-  #menu h2{
-    font-size:18px!important;
-    margin-bottom:2px!important;
-  }
-  input,select{
-    padding:8px!important;
-    margin-top:4px!important;
-    font-size:13px!important;
-  }
-  button{
-    padding:8px!important;
-    margin-top:4px!important;
-    font-size:12px!important;
-  }
-  .badge{
-    padding:6px!important;
-    font-size:10px!important;
-    margin-top:4px!important;
-  }
-  #levelText{
-    font-size:11px!important;
-    margin-top:4px!important;
-  }
-  .xpWrap{
-    height:6px!important;
-    margin-top:3px!important;
-  }
-  #premiumHub{
-    padding:6px!important;
-    margin-bottom:115px!important;
-  }
-  #premiumHub button{
-    padding:7px 4px!important;
-    font-size:11px!important;
-    min-height:34px!important;
-  }
-  #menu .stat{
-    padding:4px 2px!important;
-  }
-  #menu .stat b{font-size:9px!important;}
-  #menu .stat span{font-size:13px!important;}
+
+#premiumHub div{
+  gap:4px!important;
 }
-@media(max-height:820px){
-  #menu .small{display:none!important;}
+
+#premiumHub button{
+  padding:6px 2px!important;
+  font-size:10px!important;
+  min-height:31px!important;
 }
+
+/* Make quiz screen fit well too */
+#quiz .card{
+  padding:8px!important;
+}
+
+.stat{
+  padding:5px 2px!important;
+}
+
+.stat b{
+  font-size:10px!important;
+}
+
+.stat span{
+  font-size:16px!important;
+}
+
+#timerWrap{
+  height:7px!important;
+  margin:6px 0!important;
+}
+
+#question{
+  font-size:17px!important;
+  margin:8px 0!important;
+}
+
+.answer{
+  padding:8px!important;
+  padding-left:12px!important;
+  font-size:13px!important;
+}
+
+#feedback{
+  font-size:14px!important;
+  min-height:18px!important;
+}
+
+/* On very short screens, hide only decoration, not buttons */
 @media(max-height:760px){
-  .tag{display:none!important;}
-  #menu .hero{display:none!important;}
-  .appIconMini{display:none!important;}
-  #menu h2{font-size:16px!important;}
-  .card{padding:8px!important;margin-top:5px!important;}
+  #menu .hero,
+  .appIconMini{
+    display:none!important;
+  }
+  .logoMain{font-size:24px!important;}
+  .logoSub{font-size:14px!important;}
+  #menu h2{font-size:15px!important;}
+}
+
+@media(max-height:700px){
+  .logo{display:none!important;}
+  #menu h2{display:none!important;}
+  .badge{display:none!important;}
+  #premiumHub button{min-height:29px!important;font-size:9px!important;}
 }
 
 </style>
 </head>
 <body>
-
-<div id="splashScreen">
-  <div class="splashIcon">💡</div>
-  <div class="splashTitle">GK QUIZ</div>
-  <div class="splashSub">RUSH</div>
-  <div class="loadingText">Loading Quiz Arena...</div>
-  <div class="loadingBar"><div id="loadingFill"></div></div>
-</div>
-
 <div id="game">
-<div class="logo"><div class="appIconMini">💡</div><div class="logoMain">GK QUIZ</div><div class="logoSub">RUSH</div><div class="tag">PLAY • LEARN • WIN</div></div>
+<div class="logo"><div class="logoMain">GK QUIZ</div><div class="logoSub">RUSH</div><div class="tag">PLAY • LEARN • WIN</div></div>
 
 <div id="menu" class="card">
 <div class="hero">💡</div>
@@ -1195,54 +1186,21 @@ applyTheme();
 resetDailyCountersIfNeeded();
 
 
-// ===== FINAL BUG SAFETY + SPLASH HANDLER =====
-window.addEventListener("load",()=>{
-    setTimeout(()=>{
-        const splash=document.getElementById("splashScreen");
-        if(splash) splash.classList.add("hideSplash");
-    },1900);
-});
-
-window.addEventListener("error",(event)=>{
-    console.log("GK Quiz Rush handled error:", event.message);
-});
-
-function finalBugCheck(){
-    try{
-        if(typeof makeQuestion!=="function"){
-            showToast("Question engine loading...");
-        }
-        if(!localStorage.getItem("coins")) localStorage.setItem("coins","0");
-        if(!localStorage.getItem("playerXP")) localStorage.setItem("playerXP","0");
-        if(!localStorage.getItem("leaderboard")) localStorage.setItem("leaderboard","[]");
-    }catch(e){
-        console.log("Final bug check handled:",e);
-    }
-}
-finalBugCheck();
-
-// keep splash from blocking app if browser delays load
-setTimeout(()=>{
-    const splash=document.getElementById("splashScreen");
-    if(splash) splash.classList.add("hideSplash");
-},3200);
-
-
-// Android WebView bottom navigation safety
-function applyAndroidNavSafePadding(){
+// Balanced APK layout: avoid huge scroll while keeping bottom buttons visible
+function applyBalancedApkLayout(){
   try{
     if(/Android/i.test(navigator.userAgent)){
-      document.body.style.paddingBottom = "110px";
+      document.body.style.paddingBottom = "22px";
       var game = document.getElementById("game");
-      if(game) game.style.paddingBottom = "120px";
+      if(game) game.style.paddingBottom = "28px";
       var hub = document.getElementById("premiumHub");
-      if(hub) hub.style.marginBottom = "120px";
+      if(hub) hub.style.marginBottom = "18px";
     }
   }catch(e){}
 }
-window.addEventListener("load", applyAndroidNavSafePadding);
-window.addEventListener("resize", applyAndroidNavSafePadding);
-setTimeout(applyAndroidNavSafePadding, 500);
+window.addEventListener("load", applyBalancedApkLayout);
+window.addEventListener("resize", applyBalancedApkLayout);
+setTimeout(applyBalancedApkLayout, 500);
 
 </script>
 </body>
