@@ -565,6 +565,97 @@ button{
     .appIconMini{display:none!important;}
 }
 
+
+/* APK NAVIGATION BAR SAFE FIX */
+html,body{
+  min-height:100%;
+  height:auto!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+}
+body{
+  padding-bottom:90px!important;
+}
+#game{
+  height:auto!important;
+  min-height:auto!important;
+  padding-bottom:100px!important;
+}
+#menu{
+  margin-bottom:95px!important;
+}
+#premiumHub{
+  margin-bottom:100px!important;
+}
+@media(max-width:480px){
+  body{
+    padding:5px 5px 105px 5px!important;
+  }
+  #game{
+    padding-bottom:115px!important;
+  }
+  .logoMain{font-size:26px!important;}
+  .logoSub{font-size:15px!important;}
+  .tag{font-size:10px!important;}
+  #menu .hero,.appIconMini{
+    width:46px!important;
+    height:46px!important;
+    font-size:24px!important;
+    margin-bottom:2px!important;
+  }
+  #menu h2{
+    font-size:18px!important;
+    margin-bottom:2px!important;
+  }
+  input,select{
+    padding:8px!important;
+    margin-top:4px!important;
+    font-size:13px!important;
+  }
+  button{
+    padding:8px!important;
+    margin-top:4px!important;
+    font-size:12px!important;
+  }
+  .badge{
+    padding:6px!important;
+    font-size:10px!important;
+    margin-top:4px!important;
+  }
+  #levelText{
+    font-size:11px!important;
+    margin-top:4px!important;
+  }
+  .xpWrap{
+    height:6px!important;
+    margin-top:3px!important;
+  }
+  #premiumHub{
+    padding:6px!important;
+    margin-bottom:115px!important;
+  }
+  #premiumHub button{
+    padding:7px 4px!important;
+    font-size:11px!important;
+    min-height:34px!important;
+  }
+  #menu .stat{
+    padding:4px 2px!important;
+  }
+  #menu .stat b{font-size:9px!important;}
+  #menu .stat span{font-size:13px!important;}
+}
+@media(max-height:820px){
+  #menu .small{display:none!important;}
+}
+@media(max-height:760px){
+  .tag{display:none!important;}
+  #menu .hero{display:none!important;}
+  .appIconMini{display:none!important;}
+  #menu h2{font-size:16px!important;}
+  .card{padding:8px!important;margin-top:5px!important;}
+}
+
 </style>
 </head>
 <body>
@@ -1135,6 +1226,23 @@ setTimeout(()=>{
     const splash=document.getElementById("splashScreen");
     if(splash) splash.classList.add("hideSplash");
 },3200);
+
+
+// Android WebView bottom navigation safety
+function applyAndroidNavSafePadding(){
+  try{
+    if(/Android/i.test(navigator.userAgent)){
+      document.body.style.paddingBottom = "110px";
+      var game = document.getElementById("game");
+      if(game) game.style.paddingBottom = "120px";
+      var hub = document.getElementById("premiumHub");
+      if(hub) hub.style.marginBottom = "120px";
+    }
+  }catch(e){}
+}
+window.addEventListener("load", applyAndroidNavSafePadding);
+window.addEventListener("resize", applyAndroidNavSafePadding);
+setTimeout(applyAndroidNavSafePadding, 500);
 
 </script>
 </body>
