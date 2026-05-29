@@ -67,7 +67,7 @@ button{width:100%;border:none;margin-top:10px;padding:15px;border-radius:18px;fo
 <div class="grid2"><button class="btnBlue" onclick="showLeaderboard()">🏆 Leaderboard</button><button class="btnBlue" onclick="showAchievements()">🏅 Achievements</button></div>
 <button class="btnBlue" onclick="toggleMusic()">🎵 Music / Sound On-Off</button>
 <div id="levelText">Level 1 • XP 0/500</div><div class="xpWrap"><div id="xpBar"></div></div>
-<div class="badge">No paid backend • Offline capable • Play Store friendly</div>
+<div class="badge">No paid backend • Offline capable • Play Store friendly</div><div class="card" style="margin-top:12px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div class="stat"><b>Coins</b><span id="coins">0</span></div><div class="stat"><b>Rank</b><span id="rankMini">Rookie</span></div><div class="stat"><b>Daily</b><span id="dailyStreak">1</span></div></div><div class="badge">🎯 Mission: Answer 10 questions today</div></div>
 </div>
 
 <div id="quiz">
@@ -306,6 +306,34 @@ function buildMegaQuestion(){
 makeQuestion = function(){
     return buildMegaQuestion();
 };
+
+
+let coins=parseInt(localStorage.getItem('coins')||'0');
+function updateMeta(){
+ const c=document.getElementById('coins'); if(c) c.innerText=coins;
+ const r=document.getElementById('rankMini');
+ if(r){
+  let rank='Rookie';
+  if(xp>500) rank='Scholar';
+  if(xp>1500) rank='Expert';
+  if(xp>3000) rank='Master';
+  if(xp>6000) rank='Legend';
+  r.innerText=rank;
+ }
+}
+const originalChoose=choose;
+choose=function(i,btn){
+ let before=score;
+ originalChoose(i,btn);
+ setTimeout(()=>{
+   if(score>before){
+      coins+=10;
+      localStorage.setItem('coins',coins);
+      updateMeta();
+   }
+ },50);
+}
+setInterval(updateMeta,1000);
 
 </script>
 </body>
