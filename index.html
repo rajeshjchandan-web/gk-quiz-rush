@@ -24,6 +24,192 @@ button{width:100%;border:none;margin-top:10px;padding:15px;border-radius:18px;fo
 .item,.achItem{display:flex;justify-content:space-between;align-items:center;gap:8px;background:rgba(0,0,0,.28);border:1px solid rgba(0,229,255,.14);border-radius:16px;padding:12px;margin-top:9px}.achItem.unlocked{color:var(--cyan);box-shadow:0 0 12px rgba(0,229,255,.18)}
 .toast{position:fixed;top:17%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold),var(--orange));color:#111;padding:14px 22px;border-radius:20px;font-weight:900;font-size:21px;z-index:1000;box-shadow:0 0 28px var(--gold);animation:pop 1.8s forwards}@keyframes pop{0%{opacity:0;transform:translateX(-50%) scale(.55)}20%{opacity:1;transform:translateX(-50%) scale(1.08)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) scale(1.45)}}.particle{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--gold);pointer-events:none;z-index:999}
 @media(max-width:480px){.logoMain{font-size:36px}.logoSub{font-size:23px}#question{font-size:20px}button{font-size:15px;padding:13px}.grid2{grid-template-columns:1fr}}
+
+/* ===== PREMIUM V3 NO-SCROLL MOBILE DASHBOARD ===== */
+body{
+    min-height:100dvh;
+    height:100dvh;
+    overflow:hidden;
+    padding:8px;
+}
+
+#game{
+    max-width:480px;
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+}
+
+.logo{
+    margin:2px auto 4px;
+}
+
+.logoMain{
+    font-size:30px!important;
+    line-height:1;
+}
+
+.logoSub{
+    font-size:18px!important;
+    line-height:1;
+}
+
+.tag{
+    font-size:10px!important;
+    margin-top:2px!important;
+    letter-spacing:1px!important;
+}
+
+.card{
+    margin-top:6px!important;
+    padding:10px!important;
+    border-radius:18px!important;
+}
+
+#menu{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+#menu .hero{
+    width:54px!important;
+    height:54px!important;
+    border-radius:16px!important;
+    font-size:28px!important;
+    margin:0 auto 2px!important;
+}
+
+#menu h2{
+    font-size:18px!important;
+    margin-bottom:0!important;
+}
+
+#menu .small{
+    display:none!important;
+}
+
+input,select{
+    margin-top:4px!important;
+    padding:9px!important;
+    border-radius:12px!important;
+    font-size:13px!important;
+}
+
+button{
+    margin-top:5px!important;
+    padding:10px!important;
+    border-radius:13px!important;
+    font-size:13px!important;
+}
+
+.btnGold{
+    font-size:15px!important;
+}
+
+.grid2{
+    gap:6px!important;
+}
+
+#levelText{
+    margin-top:3px!important;
+    font-size:12px!important;
+}
+
+.xpWrap{
+    margin-top:3px!important;
+    height:8px!important;
+}
+
+.badge{
+    margin-top:4px!important;
+    padding:7px!important;
+    border-radius:12px!important;
+    font-size:12px!important;
+}
+
+#menu .card{
+    margin-top:4px!important;
+    padding:7px!important;
+}
+
+#menu .stat{
+    padding:6px 2px!important;
+    border-radius:12px!important;
+}
+
+#menu .stat b{
+    font-size:10px!important;
+}
+
+#menu .stat span{
+    font-size:15px!important;
+    margin-top:1px!important;
+}
+
+#quiz .card{
+    padding:10px!important;
+}
+
+.stats{
+    gap:6px!important;
+}
+
+.stat{
+    padding:7px 3px!important;
+}
+
+.stat b{
+    font-size:11px!important;
+}
+
+.stat span{
+    font-size:18px!important;
+}
+
+#timerWrap{
+    height:9px!important;
+    margin:8px 0!important;
+}
+
+#question{
+    font-size:18px!important;
+    margin:10px 0!important;
+}
+
+.answer{
+    padding:11px!important;
+    padding-left:14px!important;
+    font-size:14px!important;
+}
+
+#feedback{
+    font-size:16px!important;
+    min-height:22px!important;
+}
+
+#result .hero{
+    width:62px!important;
+    height:62px!important;
+    font-size:32px!important;
+}
+
+@media(max-height:720px){
+    .logoMain{font-size:26px!important;}
+    .logoSub{font-size:16px!important;}
+    #menu .hero{display:none!important;}
+    #menu h2{font-size:16px!important;}
+    button{padding:8px!important;font-size:12px!important;}
+    input,select{padding:8px!important;font-size:12px!important;}
+    .badge{padding:6px!important;font-size:11px!important;}
+}
+
+@media(max-height:640px){
+    .tag{display:none!important;}
+    #menu h2{display:none!important;}
+}
+
 </style>
 </head>
 <body>
@@ -33,7 +219,7 @@ button{width:100%;border:none;margin-top:10px;padding:15px;border-radius:18px;fo
 <div id="menu" class="card">
 <div class="hero">💡</div>
 <h2>Premium Quiz Game</h2>
-<p class="small">Stable Play Store version with working questions, premium UI, browser music, sound effects, 9 languages, anti-repeat logic, leaderboard and achievements.</p>
+<p class="small">Premium Play Store-ready quiz with coins, XP, missions, music, and 9 languages.</p>
 <input id="playerName" value="Player 1" placeholder="Player Name">
 <div class="grid2">
 <select id="language">
@@ -63,11 +249,11 @@ button{width:100%;border:none;margin-top:10px;padding:15px;border-radius:18px;fo
 <option value="leaders">World Leaders</option>
 </select>
 </div>
-<div class="grid2"><button class="btnGold" onclick="startGame('endless')">▶ Endless Play</button><button class="btnGold" onclick="startGame('classic')">⚡ 10 Questions</button></div>
-<div class="grid2"><button class="btnBlue" onclick="showLeaderboard()">🏆 Leaderboard</button><button class="btnBlue" onclick="showAchievements()">🏅 Achievements</button></div>
-<button class="btnBlue" onclick="toggleMusic()">🎵 Music / Sound On-Off</button>
+<div class="grid2"><button class="btnGold" onclick="startGame('endless')">▶ PLAY</button><button class="btnGold" onclick="startGame('classic')">⚡ QUICK</button></div>
+<div class="grid2"><button class="btnBlue" onclick="showLeaderboard()">🏆 Board</button><button class="btnBlue" onclick="showAchievements()">🏅 Badges</button></div>
+<button class="btnBlue" onclick="toggleMusic()">🎵 Sound</button>
 <div id="levelText">Level 1 • XP 0/500</div><div class="xpWrap"><div id="xpBar"></div></div>
-<div class="badge">No paid backend • Offline capable • Play Store friendly</div><div class="card" style="margin-top:12px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div class="stat"><b>Coins</b><span id="coins">0</span></div><div class="stat"><b>Rank</b><span id="rankMini">Rookie</span></div><div class="stat"><b>Daily</b><span id="dailyStreak">1</span></div></div><div class="badge">🎯 Mission: Answer 10 questions today</div></div>
+<div class="badge">Offline • Free backend • Play Store ready</div><div class="card" style="margin-top:12px"><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px"><div class="stat"><b>Coins</b><span id="coins">0</span></div><div class="stat"><b>Rank</b><span id="rankMini">Rookie</span></div><div class="stat"><b>Daily</b><span id="dailyStreak">1</span></div></div><div class="badge">🎯 Daily: Answer 10 questions</div></div>
 </div>
 
 <div id="quiz">
@@ -76,8 +262,8 @@ button{width:100%;border:none;margin-top:10px;padding:15px;border-radius:18px;fo
 </div>
 
 <div id="result" class="card"><div class="hero">🏆</div><h2 id="resultTitle">Quiz Complete</h2><div style="font-size:42px;color:var(--cyan);font-weight:900" id="finalScore">0</div><div id="rank" class="badge">Rank</div><button class="btnGold" onclick="startGame('endless')">Play Again</button><button class="btnBlue" onclick="showMenu()">Main Menu</button></div>
-<div id="leaderboard" class="card"><h2>🏆 Leaderboard</h2><div id="leaderList"></div><button class="btnBlue" onclick="clearLeaderboard()">Clear</button><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
-<div id="achievements" class="card"><h2>🏅 Achievements</h2><div id="achievementList"></div><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
+<div id="leaderboard" class="card"><h2>🏆 Board</h2><div id="leaderList"></div><button class="btnBlue" onclick="clearLeaderboard()">Clear</button><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
+<div id="achievements" class="card"><h2>🏅 Badges</h2><div id="achievementList"></div><button class="btnGold" onclick="showMenu()">Main Menu</button></div>
 </div>
 
 <script>
