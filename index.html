@@ -463,11 +463,122 @@ button{
   #levelText{font-size:11px!important;}
   .xpWrap{height:6px!important;}
 }
+
+/* ===== FINAL PLAY STORE POLISH: SPLASH + LOADING + ICON ===== */
+#splashScreen{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    background:
+        radial-gradient(circle at 50% 20%,rgba(255,213,74,.25),transparent 30%),
+        radial-gradient(circle at 50% 70%,rgba(0,229,255,.18),transparent 35%),
+        linear-gradient(160deg,#020714,#071633,#020714);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    transition:opacity .6s ease, visibility .6s ease;
+}
+
+#splashScreen.hideSplash{
+    opacity:0;
+    visibility:hidden;
+}
+
+.splashIcon{
+    width:112px;
+    height:112px;
+    border-radius:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:58px;
+    background:radial-gradient(circle at 50% 25%,#fff6a6,#ffb300 36%,#071633 38%);
+    border:3px solid var(--gold);
+    box-shadow:0 0 35px var(--gold), inset 0 0 24px rgba(0,0,0,.35);
+    animation:splashPulse 1.2s infinite alternate;
+}
+
+@keyframes splashPulse{
+    from{transform:scale(1);filter:brightness(1)}
+    to{transform:scale(1.06);filter:brightness(1.4)}
+}
+
+.splashTitle{
+    margin-top:18px;
+    font-size:42px;
+    font-weight:900;
+    color:var(--gold);
+    text-shadow:0 0 18px var(--gold),0 4px 0 #8b5200;
+}
+
+.splashSub{
+    font-size:28px;
+    font-weight:900;
+    text-shadow:0 0 16px var(--cyan);
+}
+
+.loadingText{
+    margin-top:22px;
+    color:#cfe8ff;
+    font-weight:700;
+    font-size:14px;
+}
+
+.loadingBar{
+    margin-top:12px;
+    width:240px;
+    height:12px;
+    background:#061021;
+    border:1px solid rgba(0,229,255,.35);
+    border-radius:30px;
+    overflow:hidden;
+}
+
+#loadingFill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--cyan),var(--gold));
+    animation:loadFill 1.8s ease forwards;
+}
+
+@keyframes loadFill{
+    to{width:100%}
+}
+
+.appIconMini{
+    width:42px;
+    height:42px;
+    border-radius:13px;
+    margin:0 auto 4px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+    background:radial-gradient(circle at 50% 25%,#fff6a6,#ffb300 36%,#071633 38%);
+    border:2px solid var(--gold);
+    box-shadow:0 0 18px var(--gold);
+}
+
+@media(max-height:720px){
+    .appIconMini{display:none!important;}
+}
+
 </style>
 </head>
 <body>
+
+<div id="splashScreen">
+  <div class="splashIcon">💡</div>
+  <div class="splashTitle">GK QUIZ</div>
+  <div class="splashSub">RUSH</div>
+  <div class="loadingText">Loading Quiz Arena...</div>
+  <div class="loadingBar"><div id="loadingFill"></div></div>
+</div>
+
 <div id="game">
-<div class="logo"><div class="logoMain">GK QUIZ</div><div class="logoSub">RUSH</div><div class="tag">PLAY • LEARN • WIN</div></div>
+<div class="logo"><div class="appIconMini">💡</div><div class="logoMain">GK QUIZ</div><div class="logoSub">RUSH</div><div class="tag">PLAY • LEARN • WIN</div></div>
 
 <div id="menu" class="card">
 <div class="hero">💡</div>
@@ -991,6 +1102,39 @@ setInterval(()=>{
 
 applyTheme();
 resetDailyCountersIfNeeded();
+
+
+// ===== FINAL BUG SAFETY + SPLASH HANDLER =====
+window.addEventListener("load",()=>{
+    setTimeout(()=>{
+        const splash=document.getElementById("splashScreen");
+        if(splash) splash.classList.add("hideSplash");
+    },1900);
+});
+
+window.addEventListener("error",(event)=>{
+    console.log("GK Quiz Rush handled error:", event.message);
+});
+
+function finalBugCheck(){
+    try{
+        if(typeof makeQuestion!=="function"){
+            showToast("Question engine loading...");
+        }
+        if(!localStorage.getItem("coins")) localStorage.setItem("coins","0");
+        if(!localStorage.getItem("playerXP")) localStorage.setItem("playerXP","0");
+        if(!localStorage.getItem("leaderboard")) localStorage.setItem("leaderboard","[]");
+    }catch(e){
+        console.log("Final bug check handled:",e);
+    }
+}
+finalBugCheck();
+
+// keep splash from blocking app if browser delays load
+setTimeout(()=>{
+    const splash=document.getElementById("splashScreen");
+    if(splash) splash.classList.add("hideSplash");
+},3200);
 
 </script>
 </body>
